@@ -1,17 +1,16 @@
 {
   "name": "gauge-chart-library",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "Gauge Chart made by me",
   "author": "chichoon <chichoon.choi@gmail.com>",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/gauge-chart-lib.umd.cjs",
-  "module": "./dist/gauge-chart-lib.js",
-  "private": true,
+  "main": "./gauge-chart-lib.umd.cjs",
+  "module": "./gauge-chart-lib.js",
   "exports": {
     ".": {
-      "import": "./dist/gauge-chart-lib.js",
-      "require": "./dist/gauge-chart-lib.umd.cjs"
+      "import": "./gauge-chart-lib.js",
+      "require": "./gauge-chart-lib.umd.cjs"
     }
   },
   "scripts": {
@@ -19,6 +18,7 @@
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
+    "build-publish": "npm run build && node setupPackage.js && cd dist && npm publish",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",

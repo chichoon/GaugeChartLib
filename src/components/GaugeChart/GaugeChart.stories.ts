@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import GaugeChart from './GaugeChart.vue';
 
 const meta = {
-  title: 'Gauge Chart',
+  title: 'Chart/Gauge Chart',
   component: GaugeChart,
   tags: ['chart'],
   argTypes: {
