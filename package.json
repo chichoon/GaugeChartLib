@@ -1,6 +1,6 @@
 {
   "name": "gauge-chart-library",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Gauge Chart made by me",
   "author": "chichoon <chichoon.choi@gmail.com>",
   "license": "MIT",
@@ -10,6 +10,7 @@
   "types": "./main.d.ts",
   "exports": {
     ".": {
+      "types": "./main.d.ts",
       "import": "./gauge-chart-lib.js",
       "require": "./gauge-chart-lib.umd.cjs"
     }
