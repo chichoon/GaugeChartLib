@@ -1,6 +1,19 @@
-import './assets/main.css'
+import type { App } from 'vue';
+import GaugeChart from './components/GaugeChart';
 
-import { createApp } from 'vue'
-import App from './App.vue'
+const components = [GaugeChart];
 
-createApp(App).mount('#app')
+const install = (app: App) => {
+  if (!app) return;
+  components.forEach((component) => {
+    app.component(component.name, component);
+  });
+};
+
+const GaugeChartLib = {
+  install
+};
+
+export { GaugeChart };
+
+export default GaugeChartLib;
