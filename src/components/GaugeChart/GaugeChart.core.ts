@@ -59,7 +59,6 @@ export class GaugeChart {
 
   #initialize(args: GaugeChartArgs, isFirstTime?: boolean) {
     if (isFirstTime) this.previousValue = 0;
-    else this.previousValue = this.percentageValue;
 
     this.startColor = args.startColor;
     this.endColor = args.endColor;
@@ -87,9 +86,11 @@ export class GaugeChart {
     this.#drawBackground();
     this.#drawGauge(value);
     this.#drawText(value);
+    this.previousValue = value;
 
-    if (this.percentageValue > this.previousValue && value >= this.percentageValue) return;
-    else if (this.percentageValue <= this.previousValue && value <= this.percentageValue) return;
+    if (delta === 0) return;
+    if (delta > 0 && value >= this.percentageValue) return;
+    if (delta < 0 && value <= this.percentageValue) return;
     this.animationFrameEventId = requestAnimationFrame(() =>
       this.#drawChartWithAnimation(value + delta, delta)
     );
