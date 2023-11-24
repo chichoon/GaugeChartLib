@@ -12,8 +12,6 @@ export function drawSector(
 ) {
   const startRadian = convertToRadians(startAngle);
   const endRadian = convertToRadians(endAngle);
-  console.log('start: ', startRadian);
-  console.log('end: ', endRadian);
 
   ctx.lineWidth = width;
   ctx.lineCap = 'butt'; // butt: 기본값, 끝점에 정확히 떨어진다 | round: 끝점이 반원으로 둥글게 된다 | square: 끝점이 사각형으로 된다
@@ -31,25 +29,14 @@ export function drawSector(
   ctx.save(); // 현재의 상태를 저장한다
   ctx.strokeStyle = 'white';
   ctx.lineWidth = 2;
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-  ctx.shadowBlur = 7;
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 그림자 색상 설정
+  ctx.shadowBlur = 7; // 그림자 번짐 정도
+  ctx.shadowOffsetX = 0; // 그림자 X 축 위치
+  ctx.shadowOffsetY = 0; // 그림자 Y 축 위치
   ctx.lineCap = 'butt';
   ctx.beginPath(); // 다시 새로운 경로 시작
   ctx.arc(cx, cy, radius + width / 2, startRadian, endRadian); // 그림자를 그릴 호를 추가
   ctx.clip(); // 이후의 그리기는 이 clip 영역 안에서만 그려진다 (Clip 됨)
-  ctx.stroke();
-  ctx.restore();
-
-  // =============== 그림자 ===============
-  ctx.save();
-  ctx.strokeStyle = 'white';
-  ctx.lineWidth = 2;
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-  ctx.shadowBlur = 7;
-  ctx.lineCap = 'butt';
-  ctx.beginPath();
-  ctx.arc(cx, cy, radius - width / 2 - 2, startRadian, endRadian);
-  ctx.clip();
   ctx.stroke();
   ctx.restore();
 }
