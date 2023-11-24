@@ -7,9 +7,23 @@ const meta = {
   component: GaugeChart,
   tags: ['chart'],
   argTypes: {
-    color: { control: 'color' }
+    startColor: { control: 'color' },
+    endColor: { control: 'color' },
+    value: { control: 'number' },
+    minValue: { control: 'number' },
+    maxValue: { control: 'number' },
+    width: { control: 'number' }, // FIXME:for debug
+    height: { control: 'number' } // FIXME: for debug
   },
-  args: { color: '#FF0000' }
+  args: {
+    startColor: '#FF0000',
+    endColor: '#00FF00',
+    value: 0,
+    minValue: 0,
+    maxValue: 120,
+    width: 120,
+    height: 120
+  }
 } satisfies Meta<typeof GaugeChart>;
 
 export default meta;
@@ -18,6 +32,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    color: '#FF0000'
+    startColor: '#FF0000',
+    endColor: '#00FF00',
+    value: 0,
+    minValue: 0,
+    maxValue: 100,
+    width: 120,
+    height: 120
   }
 };
