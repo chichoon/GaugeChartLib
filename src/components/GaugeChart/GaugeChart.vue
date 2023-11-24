@@ -45,7 +45,5 @@ watch(props, () => {
 .gauge-chart {
   width: 100%;
   height: 100%;
-  border: 1px solid black;
-  background-color: rgba(0, 0, 0, 0.7);
 }
 </style>
