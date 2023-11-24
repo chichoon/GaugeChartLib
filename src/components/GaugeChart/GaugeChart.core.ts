@@ -1,4 +1,5 @@
-import { convertValueToDegree, drawSector } from './utils';
+import { convertRGBToHex } from './utils';
+import { convertValueToDegree, convertValueToGradientColor, drawSector } from './utils';
 
 interface GaugeChartArgs {
   startColor: string;
@@ -94,6 +95,9 @@ export class GaugeChart {
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
     const END_DEGREE = convertValueToDegree(this.value, this.maxValue);
+    const CURRENT_COLOR = convertRGBToHex(
+      convertValueToGradientColor(this.startColor, this.endColor, this.value, this.maxValue)
+    );
 
     drawSector(
       this.ctx,
@@ -103,7 +107,7 @@ export class GaugeChart {
       135,
       END_DEGREE,
       WIDTH,
-      this.startColor
+      CURRENT_COLOR
     );
   }
 }
