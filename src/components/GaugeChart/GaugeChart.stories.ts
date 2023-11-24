@@ -11,18 +11,14 @@ const meta = {
     endColor: { control: 'color' },
     value: { control: 'number' },
     minValue: { control: 'number' },
-    maxValue: { control: 'number' },
-    width: { control: 'number' }, // FIXME:for debug
-    height: { control: 'number' } // FIXME: for debug
+    maxValue: { control: 'number' }
   },
   args: {
     startColor: '#FF0000',
     endColor: '#00FF00',
     value: 0,
     minValue: 0,
-    maxValue: 120,
-    width: 120,
-    height: 120
+    maxValue: 120
   }
 } satisfies Meta<typeof GaugeChart>;
 
@@ -36,9 +32,7 @@ export const Default: Story = {
     endColor: '#8CC7F9',
     value: 35,
     minValue: 0,
-    maxValue: 100,
-    width: 120,
-    height: 120
+    maxValue: 100
   }
 };
 
@@ -48,8 +42,6 @@ export const WithMinValue: Story = {
     endColor: '#FAA70A',
     value: 165,
     minValue: 100,
-    maxValue: 200,
-    width: 120,
-    height: 120
+    maxValue: 200
   }
 };

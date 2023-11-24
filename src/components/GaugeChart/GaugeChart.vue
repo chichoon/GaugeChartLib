@@ -9,9 +9,6 @@ interface Props {
   value: number;
   minValue?: number;
   maxValue: number;
-
-  width: number; // FIXME: for debug
-  height: number; // FIXME: for debug
 }
 
 const props = defineProps<Props>();
@@ -41,7 +38,7 @@ watch(props, () => {
 </script>
 
 <template>
-  <div ref="wrapperRef" class="gauge-chart" :style="`width: ${width}px; height: ${height}px;`" />
+  <div ref="wrapperRef" class="gauge-chart" />
 </template>
 
 <style scoped lang="scss">
