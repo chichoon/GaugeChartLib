@@ -10,7 +10,7 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "types": ["node"],
+    "types": ["node", "vite/client"],
     "outDir": "dist",
     "declaration": true
   }
