@@ -28,7 +28,7 @@ export function drawSector(
   // =============== 그림자 ===============
   ctx.save(); // 현재의 상태를 저장한다
   ctx.strokeStyle = 'white';
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 1;
   ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 그림자 색상 설정
   ctx.shadowBlur = 7; // 그림자 번짐 정도
   ctx.shadowOffsetX = 0; // 그림자 X 축 위치
