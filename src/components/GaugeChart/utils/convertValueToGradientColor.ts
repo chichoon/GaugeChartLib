@@ -1,12 +1,7 @@
 import { convertHexToRGB } from './convertHexToRGB';
 
-export function convertValueToGradientColor(
-  startColor: string,
-  endColor: string,
-  value: number,
-  maxValue: number
-) {
-  const ratio = value / maxValue;
+export function convertValueToGradientColor(startColor: string, endColor: string, value: number) {
+  const ratio = value / 100;
   const startColorRGB = convertHexToRGB(startColor);
   const endColorRGB = convertHexToRGB(endColor);
 

@@ -1,6 +1,9 @@
 export { drawCircle } from './drawCircle';
 export { drawSector } from './drawSector';
+export { drawText } from './drawText';
 export { convertToRadians } from './convertToRadians';
 export { convertValueToDegree } from './convertValueToDegree';
 export { convertValueToGradientColor } from './convertValueToGradientColor';
 export { convertRGBToHex } from './convertRGBToHex';
+export { convertHexToRGB } from './convertHexToRGB';
+export { convertValueToPercentage } from './convertValueToPercentage';
