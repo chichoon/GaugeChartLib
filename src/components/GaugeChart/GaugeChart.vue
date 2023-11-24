@@ -21,11 +21,6 @@ const isMounted = ref<boolean>(false);
 
 let gaugeChartInstance: GaugeChart | null = null;
 
-const resizeObserver = new ResizeObserver(() => {
-  const percentageValue = convertValueToPercentage(props.value, props.maxValue, props.minValue);
-  gaugeChartInstance?.update({ ...props, percentageValue });
-});
-
 onMounted(() => {
   const percentageValue = convertValueToPercentage(props.value, props.maxValue, props.minValue);
   gaugeChartInstance = new GaugeChart({
@@ -34,11 +29,9 @@ onMounted(() => {
     endColor: props.endColor,
     percentageValue
   });
-  isMounted.value = true;
-
-  resizeObserver.observe(wrapperRef.value as HTMLDivElement);
 
   gaugeChartInstance.drawChart();
+  isMounted.value = true;
 });
 
 watch(props, () => {
@@ -56,5 +49,6 @@ watch(props, () => {
   width: 100%;
   height: 100%;
   border: 1px solid black;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 </style>

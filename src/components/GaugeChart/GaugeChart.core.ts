@@ -23,6 +23,7 @@ export class GaugeChart {
   startColor!: string;
   endColor!: string;
   percentageValue!: number;
+  previousValue!: number;
 
   /* target DOM */
   target: HTMLDivElement;
@@ -34,8 +35,11 @@ export class GaugeChart {
   canvasWidth: number;
   canvasHeight: number;
 
+  /* Animation-related Options */
+  animationFrameEventId: number = -1;
+
   constructor(args: GaugeChartInitialArgs) {
-    this.#initialize(args);
+    this.#initialize(args, true);
     this.target = args.target;
 
     this.wrapperDOM = document.createElement('div');
@@ -53,7 +57,10 @@ export class GaugeChart {
     this.canvasHeight = this.canvasDOM.height;
   }
 
-  #initialize(args: GaugeChartArgs) {
+  #initialize(args: GaugeChartArgs, isFirstTime?: boolean) {
+    if (isFirstTime) this.previousValue = 0;
+    else this.previousValue = this.percentageValue;
+
     this.startColor = args.startColor;
     this.endColor = args.endColor;
     this.percentageValue = args.percentageValue;
@@ -67,20 +74,32 @@ export class GaugeChart {
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
 
+    cancelAnimationFrame(this.animationFrameEventId);
     this.drawChart();
   }
 
   drawChart() {
-    this.drawBackground();
-    this.drawGauge();
-    this.drawText();
-
-    // window.requestAnimationFrame(() => this.drawChart());
+    const DELTA = (this.percentageValue - this.previousValue) / 60;
+    this.#drawChartWithAnimation(this.previousValue, DELTA);
   }
 
-  drawBackground() {
+  #drawChartWithAnimation(value: number, delta: number) {
+    this.#drawBackground();
+    this.#drawGauge(value);
+    this.#drawText(value);
+
+    if (this.percentageValue > this.previousValue && value >= this.percentageValue) return;
+    else if (this.percentageValue <= this.previousValue && value <= this.percentageValue) return;
+    this.animationFrameEventId = requestAnimationFrame(() =>
+      this.#drawChartWithAnimation(value + delta, delta)
+    );
+  }
+
+  #drawBackground() {
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
+
+    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     drawSector(
       this.ctx,
@@ -90,16 +109,16 @@ export class GaugeChart {
       135, // 270도가 되려면 좌측 아래 (135도 지점) 에서 시작
       45, // 270도가 되려면 우측 아래 (45도 지점) 에서 끝
       WIDTH,
-      '#cccccc'
+      '#CCCCCC'
     );
   }
 
-  drawGauge() {
+  #drawGauge(value: number) {
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
-    const END_DEGREE = convertValueToDegree(this.percentageValue);
+    const END_DEGREE = convertValueToDegree(value);
     const CURRENT_COLOR = convertRGBToHex(
-      convertValueToGradientColor(this.startColor, this.endColor, this.percentageValue)
+      convertValueToGradientColor(this.startColor, this.endColor, value)
     );
 
     drawSector(
@@ -114,8 +133,8 @@ export class GaugeChart {
     );
   }
 
-  drawText() {
-    const TEXT = this.percentageValue.toFixed(1);
+  #drawText(value: number) {
+    const TEXT = value.toFixed(1);
     const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
     drawText(this.ctx, this.canvasWidth / 2, this.canvasHeight / 2, TEXT_SIZE, `${TEXT}%`);
   }

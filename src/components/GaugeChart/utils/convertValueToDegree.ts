@@ -1,4 +1,7 @@
 export function convertValueToDegree(value: number) {
+  if (value < 0) return 135;
+  else if (value > 100) return 45;
+
   const ratio = value / 100;
   const degree = ratio * 270;
 
