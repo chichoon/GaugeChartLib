@@ -21,15 +21,16 @@ const isMounted = ref<boolean>(false);
 let gaugeChartInstance: GaugeChart | null = null;
 
 const resizeObserver = new ResizeObserver(() => {
-  console.log(wrapperRef.value?.clientWidth, wrapperRef.value?.clientHeight);
   gaugeChartInstance?.update(props);
 });
 
 onMounted(() => {
   gaugeChartInstance = new GaugeChart({
+    target: wrapperRef.value as HTMLDivElement, // TODO: No Type Assertion
     startColor: props.startColor,
     endColor: props.endColor,
-    target: wrapperRef.value as HTMLDivElement // TODO: No Type Assertion
+    value: props.value,
+    maxValue: props.maxValue
   });
   isMounted.value = true;
 

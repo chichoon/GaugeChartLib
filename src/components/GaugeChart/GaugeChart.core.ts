@@ -1,8 +1,10 @@
-import { drawSector } from './utils';
+import { convertValueToDegree, drawSector } from './utils';
 
 interface GaugeChartArgs {
   startColor: string;
   endColor: string;
+  value: number;
+  maxValue: number;
 }
 
 export interface GaugeChartInitialArgs extends GaugeChartArgs {
@@ -12,10 +14,16 @@ export interface GaugeChartInitialArgs extends GaugeChartArgs {
 export interface GaugeChartUpdateArgs extends GaugeChartArgs {}
 
 export class GaugeChart {
-  startColor: string;
-  endColor: string;
+  /* Chart Values */
+  startColor!: string;
+  endColor!: string;
+  value!: number;
+  maxValue!: number;
+
+  /* target DOM */
   target: HTMLDivElement;
 
+  /* Canvas-related options */
   wrapperDOM: HTMLDivElement;
   canvasDOM: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -23,8 +31,7 @@ export class GaugeChart {
   canvasHeight: number;
 
   constructor(args: GaugeChartInitialArgs) {
-    this.startColor = args.startColor;
-    this.endColor = args.endColor;
+    this.#initialize(args);
     this.target = args.target;
 
     this.wrapperDOM = document.createElement('div');
@@ -42,13 +49,17 @@ export class GaugeChart {
     this.canvasHeight = this.canvasDOM.height;
   }
 
-  initialize() {
-    this.drawChart();
+  #initialize(args: GaugeChartArgs) {
+    this.startColor = args.startColor;
+    this.endColor = args.endColor;
+
+    if (args.value > args.maxValue) this.value = args.maxValue;
+    else this.value = args.value;
+    this.maxValue = args.maxValue;
   }
 
   update(newArgs: GaugeChartUpdateArgs) {
-    this.startColor = newArgs.startColor;
-    this.endColor = newArgs.endColor;
+    this.#initialize(newArgs);
 
     this.canvasDOM.width = this.wrapperDOM.clientWidth;
     this.canvasDOM.height = this.wrapperDOM.clientHeight;
@@ -60,6 +71,7 @@ export class GaugeChart {
 
   drawChart() {
     this.drawBackground();
+    this.drawGauge();
   }
 
   drawBackground() {
@@ -75,6 +87,23 @@ export class GaugeChart {
       45, // 270도가 되려면 우측 아래 (45도 지점) 에서 끝
       WIDTH,
       '#cccccc'
+    );
+  }
+
+  drawGauge() {
+    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
+    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
+    const END_DEGREE = convertValueToDegree(this.value, this.maxValue);
+
+    drawSector(
+      this.ctx,
+      this.canvasWidth / 2,
+      this.canvasHeight / 2,
+      RADIUS,
+      135,
+      END_DEGREE,
+      WIDTH,
+      this.startColor
     );
   }
 }
