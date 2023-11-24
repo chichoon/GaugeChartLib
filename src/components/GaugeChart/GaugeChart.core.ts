@@ -36,7 +36,7 @@ export class GaugeChart {
   canvasHeight: number;
 
   /* Animation-related Options */
-  animationFrameEventId: number = -1;
+  animationFrameEventId: number = 0;
 
   constructor(args: GaugeChartInitialArgs) {
     this.#initialize(args, true);
@@ -50,6 +50,8 @@ export class GaugeChart {
 
     this.wrapperDOM.style.width = '100%';
     this.wrapperDOM.style.height = '100%';
+    this.wrapperDOM.style.border = '1px solid black';
+    this.canvasDOM.style.display = 'block';
     this.canvasDOM.width = this.wrapperDOM.clientWidth;
     this.canvasDOM.height = this.wrapperDOM.clientHeight;
 
@@ -68,16 +70,20 @@ export class GaugeChart {
   update(newArgs: GaugeChartUpdateArgs) {
     this.#initialize(newArgs);
 
-    this.canvasDOM.width = this.wrapperDOM.clientWidth;
-    this.canvasDOM.height = this.wrapperDOM.clientHeight;
+    this.drawChart();
+  }
+
+  resize(width: number, height: number) {
+    this.canvasDOM.width = width;
+    this.canvasDOM.height = height;
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
 
-    cancelAnimationFrame(this.animationFrameEventId);
     this.drawChart();
   }
 
   drawChart() {
+    if (this.animationFrameEventId !== 0) cancelAnimationFrame(this.animationFrameEventId);
     const DELTA = (this.percentageValue - this.previousValue) / 60;
     this.#drawChartWithAnimation(this.previousValue, DELTA);
   }
@@ -88,9 +94,15 @@ export class GaugeChart {
     this.#drawText(value);
     this.previousValue = value;
 
-    if (delta === 0) return;
-    if (delta > 0 && value >= this.percentageValue) return;
-    if (delta < 0 && value <= this.percentageValue) return;
+    if (
+      delta === 0 ||
+      (delta > 0 && value >= this.percentageValue) ||
+      (delta < 0 && value <= this.percentageValue)
+    ) {
+      cancelAnimationFrame(this.animationFrameEventId);
+      this.animationFrameEventId = 0;
+      return;
+    }
     this.animationFrameEventId = requestAnimationFrame(() =>
       this.#drawChartWithAnimation(value + delta, delta)
     );
