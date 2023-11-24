@@ -1,7 +1,6 @@
 export function convertValueToDegree(value: number, maxValue: number) {
   const ratio = value / maxValue;
   const degree = ratio * 270;
-  console.log(degree);
 
   if (degree <= 45) return degree + 135;
   if (degree <= 225) return -(225 - degree);
