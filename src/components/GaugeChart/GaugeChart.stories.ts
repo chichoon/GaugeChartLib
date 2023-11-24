@@ -32,11 +32,23 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    startColor: '#FF0000',
-    endColor: '#00FF00',
-    value: 0,
+    startColor: '#220AFA',
+    endColor: '#8CC7F9',
+    value: 35,
     minValue: 0,
     maxValue: 100,
+    width: 120,
+    height: 120
+  }
+};
+
+export const WithMinValue: Story = {
+  args: {
+    startColor: '#FA840A',
+    endColor: '#FAA70A',
+    value: 165,
+    minValue: 100,
+    maxValue: 200,
     width: 120,
     height: 120
   }
