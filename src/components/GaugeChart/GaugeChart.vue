@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { GaugeChart } from './GaugeChart.core';
+import { convertValueToPercentage } from './utils';
 
 interface Props {
   startColor: string;
@@ -21,16 +22,17 @@ const isMounted = ref<boolean>(false);
 let gaugeChartInstance: GaugeChart | null = null;
 
 const resizeObserver = new ResizeObserver(() => {
-  gaugeChartInstance?.update(props);
+  const percentageValue = convertValueToPercentage(props.value, props.maxValue, props.minValue);
+  gaugeChartInstance?.update({ ...props, percentageValue });
 });
 
 onMounted(() => {
+  const percentageValue = convertValueToPercentage(props.value, props.maxValue, props.minValue);
   gaugeChartInstance = new GaugeChart({
     target: wrapperRef.value as HTMLDivElement, // TODO: No Type Assertion
     startColor: props.startColor,
     endColor: props.endColor,
-    value: props.value,
-    maxValue: props.maxValue
+    percentageValue
   });
   isMounted.value = true;
 
@@ -40,7 +42,8 @@ onMounted(() => {
 });
 
 watch(props, () => {
-  gaugeChartInstance?.update(props);
+  const percentageValue = convertValueToPercentage(props.value, props.maxValue, props.minValue);
+  gaugeChartInstance?.update({ ...props, percentageValue });
 });
 </script>
 

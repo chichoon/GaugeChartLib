@@ -1,11 +1,15 @@
-import { convertRGBToHex } from './utils';
-import { convertValueToDegree, convertValueToGradientColor, drawSector } from './utils';
+import {
+  convertRGBToHex,
+  convertValueToDegree,
+  convertValueToGradientColor,
+  drawSector,
+  drawText
+} from './utils';
 
 interface GaugeChartArgs {
   startColor: string;
   endColor: string;
-  value: number;
-  maxValue: number;
+  percentageValue: number;
 }
 
 export interface GaugeChartInitialArgs extends GaugeChartArgs {
@@ -18,8 +22,7 @@ export class GaugeChart {
   /* Chart Values */
   startColor!: string;
   endColor!: string;
-  value!: number;
-  maxValue!: number;
+  percentageValue!: number;
 
   /* target DOM */
   target: HTMLDivElement;
@@ -53,10 +56,7 @@ export class GaugeChart {
   #initialize(args: GaugeChartArgs) {
     this.startColor = args.startColor;
     this.endColor = args.endColor;
-
-    if (args.value > args.maxValue) this.value = args.maxValue;
-    else this.value = args.value;
-    this.maxValue = args.maxValue;
+    this.percentageValue = args.percentageValue;
   }
 
   update(newArgs: GaugeChartUpdateArgs) {
@@ -73,6 +73,9 @@ export class GaugeChart {
   drawChart() {
     this.drawBackground();
     this.drawGauge();
+    this.drawText();
+
+    // window.requestAnimationFrame(() => this.drawChart());
   }
 
   drawBackground() {
@@ -94,9 +97,9 @@ export class GaugeChart {
   drawGauge() {
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
-    const END_DEGREE = convertValueToDegree(this.value, this.maxValue);
+    const END_DEGREE = convertValueToDegree(this.percentageValue);
     const CURRENT_COLOR = convertRGBToHex(
-      convertValueToGradientColor(this.startColor, this.endColor, this.value, this.maxValue)
+      convertValueToGradientColor(this.startColor, this.endColor, this.percentageValue)
     );
 
     drawSector(
@@ -109,5 +112,11 @@ export class GaugeChart {
       WIDTH,
       CURRENT_COLOR
     );
+  }
+
+  drawText() {
+    const TEXT = this.percentageValue.toFixed(1);
+    const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
+    drawText(this.ctx, this.canvasWidth / 2, this.canvasHeight / 2, TEXT_SIZE, `${TEXT}%`);
   }
 }
