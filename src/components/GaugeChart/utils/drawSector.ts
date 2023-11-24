@@ -25,18 +25,32 @@ export function drawSector(
   ctx.strokeStyle = color; // 선의 색상을 지정한다
   ctx.stroke(); // 지정한 strokeStyle 으로 경로를 따라 실제 선을 그려낸다
 
+  // =============== 클리핑 영역 ===============
+  ctx.save(); // 현재의 그리기 영역을 저장한다
+  const region = new Path2D();
+  region.arc(cx, cy, radius - width / 2, startRadian, endRadian); // 경로에 호를 추가한다
+  region.arc(cx, cy, radius + width / 2, endRadian, startRadian, true); // 경로에 호를 추가한다
+  // 호를 두개 그리면 호가 연결되어 그리기 영역이 차트와 같은 모양으로 생성된다
+
+  ctx.clip(region, 'nonzero'); // 이후의 그리기는 이 clip 영역 안에서만 그려진다 (Clip 됨)
+
   // =============== 그림자 ===============
-  ctx.save(); // 현재의 상태를 저장한다
   ctx.strokeStyle = 'white';
   ctx.lineWidth = 1;
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 그림자 색상 설정
-  ctx.shadowBlur = 7; // 그림자 번짐 정도
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.7)'; // 그림자 색상 설정
+  ctx.shadowBlur = 10; // 그림자 번짐 정도
   ctx.shadowOffsetX = 0; // 그림자 X 축 위치
   ctx.shadowOffsetY = 0; // 그림자 Y 축 위치
   ctx.lineCap = 'butt';
   ctx.beginPath(); // 다시 새로운 경로 시작
   ctx.arc(cx, cy, radius + width / 2, startRadian, endRadian); // 그림자를 그릴 호를 추가
-  ctx.clip(); // 이후의 그리기는 이 clip 영역 안에서만 그려진다 (Clip 됨)
+  ctx.stroke(); // 그림자 그리기
+
+  ctx.beginPath(); // 안쪽 (작은 원) 그림자도 반복
+  ctx.arc(cx, cy, radius - width / 2, startRadian, endRadian);
   ctx.stroke();
-  ctx.restore();
+
+  ctx.restore(); // 저장된 그리기 영역을 복구한다
+  // 그리기 영역을 저장 + 복구하지 않으면 그림이 그려지는 영역이 클리핑된 영역으로 제한되어
+  // 후에 drawText 등이 정상 동작하지 않음
 }
