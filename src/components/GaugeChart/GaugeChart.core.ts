@@ -84,12 +84,15 @@ export class GaugeChart {
 
   drawChart() {
     if (this.animationFrameEventId !== 0) cancelAnimationFrame(this.animationFrameEventId);
+    if (!this.startColor || !this.endColor || this.percentageValue === undefined) {
+      this.#drawOnError();
+      return;
+    }
     const DELTA = (this.percentageValue - this.previousValue) / 60;
     this.#drawChartWithAnimation(this.previousValue, DELTA);
   }
 
   #drawChartWithAnimation(value: number, delta: number) {
-    this.#drawBackground();
     this.#drawGauge(value);
     this.#drawText(value);
     this.previousValue = value;
@@ -108,24 +111,6 @@ export class GaugeChart {
     );
   }
 
-  #drawBackground() {
-    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
-    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
-
-    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-
-    drawSector(
-      this.ctx,
-      this.canvasWidth / 2,
-      this.canvasHeight / 2,
-      RADIUS,
-      135, // 270도가 되려면 좌측 아래 (135도 지점) 에서 시작
-      45, // 270도가 되려면 우측 아래 (45도 지점) 에서 끝
-      WIDTH,
-      '#CCCCCC'
-    );
-  }
-
   #drawGauge(value: number) {
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
@@ -133,6 +118,8 @@ export class GaugeChart {
     const CURRENT_COLOR = convertRGBToHex(
       convertValueToGradientColor(this.startColor, this.endColor, value)
     );
+
+    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     drawSector(
       this.ctx,
@@ -144,11 +131,29 @@ export class GaugeChart {
       WIDTH,
       CURRENT_COLOR
     );
+    drawSector(
+      this.ctx,
+      this.canvasWidth / 2,
+      this.canvasHeight / 2,
+      RADIUS,
+      END_DEGREE,
+      45,
+      WIDTH,
+      '#CCCCCC'
+    );
   }
 
   #drawText(value: number) {
     const TEXT = value.toFixed(1);
     const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
     drawText(this.ctx, this.canvasWidth / 2, this.canvasHeight / 2, TEXT_SIZE, `${TEXT}%`);
+  }
+
+  #drawOnError() {
+    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.ctx.font = '30px Arial';
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
+    this.ctx.fillText('Error', this.canvasWidth / 2, this.canvasHeight / 2);
   }
 }

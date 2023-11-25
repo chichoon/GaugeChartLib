@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
+
 import { GaugeChart } from './GaugeChart.core';
 import { convertValueToPercentage } from './utils';
 
