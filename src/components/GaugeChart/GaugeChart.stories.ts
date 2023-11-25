@@ -45,3 +45,12 @@ export const WithMinValue: Story = {
     maxValue: 200
   }
 };
+
+export const WithNoValue: Story = {
+  args: {
+    startColor: undefined,
+    endColor: undefined,
+    value: undefined,
+    maxValue: undefined
+  }
+};
