@@ -1,5 +1,6 @@
 export { drawCircle } from './drawCircle';
 export { drawSector } from './drawSector';
+export { drawSectorStroke } from './drawSectorStroke';
 export { drawText } from './drawText';
 export { convertToRadians } from './convertToRadians';
 export { convertValueToDegree } from './convertValueToDegree';

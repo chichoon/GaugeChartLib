@@ -3,6 +3,7 @@ import {
   convertValueToDegree,
   convertValueToGradientColor,
   drawSector,
+  drawSectorStroke,
   drawText
 } from './utils';
 
@@ -97,15 +98,19 @@ export class GaugeChart {
     this.#drawText(value);
     this.previousValue = value;
 
-    if (
-      delta === 0 ||
-      (delta > 0 && value >= this.percentageValue) ||
-      (delta < 0 && value <= this.percentageValue)
-    ) {
+    if (delta === 0) {
       cancelAnimationFrame(this.animationFrameEventId);
       this.animationFrameEventId = 0;
       return;
     }
+    if (
+      (delta > 0 && value >= this.percentageValue) ||
+      (delta < 0 && value <= this.percentageValue)
+    ) {
+      this.#drawChartWithAnimation(this.percentageValue, 0);
+      return;
+    }
+
     this.animationFrameEventId = requestAnimationFrame(() =>
       this.#drawChartWithAnimation(value + delta, delta)
     );
@@ -121,10 +126,20 @@ export class GaugeChart {
 
     this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
+    drawSectorStroke(
+      this.ctx,
+      this.canvasWidth / 2,
+      this.canvasHeight / 2 + 5,
+      RADIUS,
+      133,
+      47,
+      WIDTH,
+      'white'
+    );
     drawSector(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2,
+      this.canvasHeight / 2 + 5,
       RADIUS,
       135,
       END_DEGREE,
@@ -134,7 +149,7 @@ export class GaugeChart {
     drawSector(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2,
+      this.canvasHeight / 2 + 5,
       RADIUS,
       END_DEGREE,
       45,
@@ -146,14 +161,29 @@ export class GaugeChart {
   #drawText(value: number) {
     const TEXT = value.toFixed(1);
     const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
-    drawText(this.ctx, this.canvasWidth / 2, this.canvasHeight / 2, TEXT_SIZE, `${TEXT}%`);
+    drawText(
+      this.ctx,
+      this.canvasWidth / 2,
+      this.canvasHeight / 2 + 5,
+      TEXT_SIZE,
+      `${TEXT}%`,
+      'black',
+      4,
+      'white'
+    );
   }
 
   #drawOnError() {
     this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    this.ctx.font = '30px Arial';
-    this.ctx.textAlign = 'center';
-    this.ctx.textBaseline = 'middle';
-    this.ctx.fillText('Error', this.canvasWidth / 2, this.canvasHeight / 2);
+    drawText(
+      this.ctx,
+      this.canvasWidth / 2,
+      this.canvasHeight / 2,
+      30,
+      'Error',
+      'black',
+      4,
+      'white'
+    );
   }
 }
