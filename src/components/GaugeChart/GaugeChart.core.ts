@@ -84,7 +84,7 @@ export class GaugeChart {
 
   drawChart() {
     if (this.animationFrameEventId !== 0) cancelAnimationFrame(this.animationFrameEventId);
-    if (!this.startColor || !this.endColor || this.percentageValue === undefined) {
+    if (!this.startColor || !this.endColor || isNaN(this.percentageValue)) {
       this.#drawOnError();
       return;
     }
