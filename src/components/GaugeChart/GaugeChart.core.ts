@@ -65,6 +65,8 @@ export class GaugeChart {
     this.tooltipDOM.style.pointerEvents = 'none';
     this.tooltipDOM.style.padding = '10px 5px';
     this.tooltipDOM.style.borderRadius = '5px';
+    this.tooltipDOM.style.zIndex = '20';
+    this.tooltipDOM.style.fontSize = '14px';
     this.tooltipDOM.style.color = 'white';
     this.tooltipDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
     this.canvasDOM.style.display = 'block';
