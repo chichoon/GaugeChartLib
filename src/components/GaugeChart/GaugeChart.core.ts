@@ -214,7 +214,7 @@ export class GaugeChart {
   }
 
   onMouseHover(e: Event) {
-    const { offsetX, offsetY } = e as MouseEvent;
+    const { offsetX, offsetY, clientX, clientY } = e as MouseEvent;
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
     const END_DEGREE =
@@ -234,8 +234,8 @@ export class GaugeChart {
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
     this.#drawText(this.percentageValue);
     this.tooltipDOM.style.display = isMouseOnGauge ? 'block' : 'none';
-    this.tooltipDOM.style.top = `${offsetY}px`;
-    this.tooltipDOM.style.left = `${offsetX + 30}px`;
+    this.tooltipDOM.style.top = `${clientY}px`;
+    this.tooltipDOM.style.left = `${clientX + 20}px`;
     this.tooltipDOM.innerText = `${this.percentageValue.toFixed(1)}%`;
   }
 }
