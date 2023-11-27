@@ -1,3 +1,3 @@
-import GaugeChart from './components/GaugeChart';
+import GaugeChart from './GaugeChart';
 
 export { GaugeChart };

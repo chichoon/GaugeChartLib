@@ -1,13 +1,17 @@
 {
   "name": "gauge-chart-library",
-  "version": "0.1.9",
+  "version": "0.1.13",
   "description": "Gauge Chart made by me",
   "author": "chichoon <chichoon.choi@gmail.com>",
   "license": "MIT",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "main": "./dist/gauge-chart-lib.umd.cjs",
   "module": "./dist/gauge-chart-lib.js",
   "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -15,9 +19,6 @@
       "require": "./dist/gauge-chart-lib.umd.cjs"
     }
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
