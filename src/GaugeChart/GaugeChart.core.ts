@@ -231,7 +231,6 @@ export class GaugeChart {
       DISTANCE <= RADIUS + WIDTH / 2 &&
       DISTANCE >= RADIUS - WIDTH / 2 &&
       checkDegreeInRange(END_DEGREE, VALUE_DEGREE);
-    console.log(isMouseOnGauge, offsetX, offsetY);
 
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
     this.#drawText(this.percentageValue);
