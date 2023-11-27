@@ -64,9 +64,20 @@ export const WithBorder: Story = {
   args: {
     startColor: '#FFFFFF',
     endColor: '#CCCCCC',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF00',
     borderColor: '#AAAAAA',
     hasShadow: true,
+    value: 35,
+    minValue: 0,
+    maxValue: 100
+  }
+};
+
+export const WithRGBString: Story = {
+  args: {
+    startColor: 'rgb(255, 0, 0)',
+    endColor: 'rgb(255, 255, 0)',
+    backgroundColor: '#FFFFFF00',
     value: 35,
     minValue: 0,
     maxValue: 100

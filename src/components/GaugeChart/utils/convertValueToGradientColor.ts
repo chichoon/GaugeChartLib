@@ -9,6 +9,7 @@ export function convertValueToGradientColor(startColor: string, endColor: string
   const endColorRGB = endColor.startsWith('#')
     ? convertHexToRGB(endColor)
     : convertStringToRGB(endColor);
+  console.log(startColorRGB);
 
   if (startColorRGB.A && endColorRGB.A) {
     return {
