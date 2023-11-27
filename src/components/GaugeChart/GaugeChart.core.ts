@@ -3,7 +3,6 @@ import {
   convertValueToDegree,
   convertValueToGradientColor,
   drawSector,
-  drawSectorStroke,
   drawText
 } from './utils';
 
