@@ -2,7 +2,7 @@
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import { GaugeChart } from './GaugeChart.core';
-import { convertValueToPercentage } from './utils';
+import { convertValueToPercentage, debounce } from './utils';
 
 interface Props {
   startColor: string;
@@ -15,12 +15,12 @@ interface Props {
 const props = defineProps<Props>();
 
 const wrapperRef = ref<HTMLDivElement | null>(null);
-const isMounted = ref<boolean>(false);
 
 let gaugeChartInstance: GaugeChart | null = null;
+const debouncedResize = debounce(() => gaugeChartInstance?.resize(), 150);
 
 const resizeObserver = new ResizeObserver(() => {
-  gaugeChartInstance?.resize();
+  debouncedResize();
 });
 
 onMounted(() => {
@@ -33,8 +33,6 @@ onMounted(() => {
   });
 
   gaugeChartInstance.drawChart();
-  isMounted.value = true;
-
   resizeObserver.observe(wrapperRef.value as HTMLDivElement);
 });
 
