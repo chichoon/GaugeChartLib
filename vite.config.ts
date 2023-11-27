@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [vue(), dts()],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'GaugeChartLib',
       fileName: 'gauge-chart-lib'
     },
