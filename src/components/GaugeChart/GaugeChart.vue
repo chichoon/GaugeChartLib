@@ -9,7 +9,6 @@ interface Props {
   endColor: string;
   backgroundColor?: string;
   hasShadow?: boolean;
-  borderColor?: string;
   textColor?: string;
   value: number;
   minValue?: number;
@@ -34,7 +33,6 @@ onMounted(() => {
     startColor: props.startColor,
     endColor: props.endColor,
     backgroundColor: props.backgroundColor,
-    borderColor: props.borderColor,
     textColor: props.textColor,
     hasShadow: props.hasShadow,
     percentageValue

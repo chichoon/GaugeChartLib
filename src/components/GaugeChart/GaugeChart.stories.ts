@@ -10,6 +10,8 @@ const meta = {
     startColor: { control: 'color' },
     endColor: { control: 'color' },
     backgroundColor: { control: 'color' },
+    hasShadow: { control: 'boolean' },
+    textColor: { control: 'color' },
     value: { control: 'number' },
     minValue: { control: 'number' },
     maxValue: { control: 'number' }
@@ -19,7 +21,9 @@ const meta = {
     endColor: '#00FF00',
     value: 0,
     minValue: 0,
-    maxValue: 120
+    maxValue: 120,
+    hasShadow: false,
+    textColor: '#000000'
   }
 } satisfies Meta<typeof GaugeChart>;
 
@@ -53,19 +57,6 @@ export const WithShadow: Story = {
     startColor: '#FFFFFF',
     endColor: '#CCCCCC',
     backgroundColor: '#FFFFFF',
-    hasShadow: true,
-    value: 35,
-    minValue: 0,
-    maxValue: 100
-  }
-};
-
-export const WithBorder: Story = {
-  args: {
-    startColor: '#FFFFFF',
-    endColor: '#CCCCCC',
-    backgroundColor: '#FFFFFF00',
-    borderColor: '#AAAAAA',
     hasShadow: true,
     value: 35,
     minValue: 0,

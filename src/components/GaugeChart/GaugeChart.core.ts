@@ -12,7 +12,6 @@ interface GaugeChartArgs {
   endColor: string;
   backgroundColor?: string;
   hasShadow?: boolean;
-  borderColor?: string;
   textColor?: string;
   percentageValue: number;
 }
@@ -29,7 +28,6 @@ export class GaugeChart {
   endColor!: string;
   backgroundColor!: string;
   hasShadow!: boolean;
-  borderColor!: string;
   textColor!: string;
   percentageValue!: number;
   previousValue!: number;
@@ -72,7 +70,6 @@ export class GaugeChart {
     this.endColor = args.endColor;
     this.backgroundColor = args.backgroundColor ?? '#CCCCCC';
     this.hasShadow = args.hasShadow ?? false;
-    this.borderColor = args.borderColor ?? '#00000000';
     this.textColor = args.textColor ?? '#000000';
     this.percentageValue = args.percentageValue;
   }
@@ -145,20 +142,10 @@ export class GaugeChart {
 
     this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-    drawSectorStroke(
-      this.ctx,
-      this.canvasWidth / 2,
-      this.canvasHeight / 2 + 5,
-      RADIUS,
-      133,
-      47,
-      WIDTH,
-      this.borderColor
-    );
     drawSector(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2 + 5,
+      this.canvasHeight / 2,
       RADIUS,
       135,
       END_DEGREE,
@@ -169,7 +156,7 @@ export class GaugeChart {
     drawSector(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2 + 5,
+      this.canvasHeight / 2,
       RADIUS,
       END_DEGREE,
       45,
