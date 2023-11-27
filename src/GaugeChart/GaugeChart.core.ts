@@ -36,7 +36,6 @@ export class GaugeChart {
   target: HTMLDivElement;
 
   /* Canvas-related options */
-  wrapperDOM: HTMLDivElement;
   canvasDOM: HTMLCanvasElement;
   tooltipDOM: HTMLDivElement;
   ctx: CanvasRenderingContext2D;
@@ -50,11 +49,9 @@ export class GaugeChart {
     this.#initialize(args, true);
     this.target = args.target;
 
-    this.wrapperDOM = document.createElement('div');
     this.canvasDOM = document.createElement('canvas');
     this.tooltipDOM = document.createElement('div');
-    this.wrapperDOM.appendChild(this.canvasDOM);
-    this.target.appendChild(this.wrapperDOM);
+    this.target.appendChild(this.canvasDOM);
     document.body.appendChild(this.tooltipDOM);
     this.ctx = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D;
 
@@ -74,8 +71,6 @@ export class GaugeChart {
   }
 
   #initializeDOMStyle() {
-    this.wrapperDOM.style.width = '100%';
-    this.wrapperDOM.style.height = '100%';
     this.tooltipDOM.style.position = 'fixed';
     this.tooltipDOM.style.display = 'none';
     this.tooltipDOM.style.pointerEvents = 'none';
@@ -85,17 +80,15 @@ export class GaugeChart {
     this.tooltipDOM.style.fontSize = '14px';
     this.tooltipDOM.style.color = 'white';
     this.tooltipDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    this.canvasDOM.style.width = '100%';
-    this.canvasDOM.style.height = '100%';
     this.canvasDOM.style.display = 'block';
-    // this.canvasDOM.style.aspectRatio = '1 / 1';
+    this.canvasDOM.style.margin = '0 auto';
+    this.canvasDOM.style.aspectRatio = '1 / 1';
   }
 
   #initializeSize() {
-    const DPR = window.devicePixelRatio || 1;
-    const SIZE = Math.min(this.canvasDOM.clientWidth, this.canvasDOM.clientHeight);
-    this.canvasDOM.width = SIZE * DPR;
-    this.canvasDOM.height = SIZE * DPR;
+    const SIZE = Math.min(this.target.clientWidth, this.target.clientHeight);
+    this.canvasDOM.width = SIZE;
+    this.canvasDOM.height = SIZE;
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
   }
@@ -124,10 +117,10 @@ export class GaugeChart {
       return;
     }
 
-    this.wrapperDOM.removeEventListener('mousemove', this.onMouseHover.bind(this));
+    this.canvasDOM.removeEventListener('mousemove', this.onMouseHover.bind(this));
     const DELTA = (this.percentageValue - this.previousValue) / 60;
     this.#drawChartWithAnimation(this.previousValue, DELTA);
-    this.wrapperDOM.addEventListener('mousemove', this.onMouseHover.bind(this));
+    this.canvasDOM.addEventListener('mousemove', this.onMouseHover.bind(this));
   }
 
   #drawChartWithAnimation(value: number, delta: number) {
@@ -238,6 +231,7 @@ export class GaugeChart {
       DISTANCE <= RADIUS + WIDTH / 2 &&
       DISTANCE >= RADIUS - WIDTH / 2 &&
       checkDegreeInRange(END_DEGREE, VALUE_DEGREE);
+    console.log(isMouseOnGauge, offsetX, offsetY);
 
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
     this.#drawText(this.percentageValue);
