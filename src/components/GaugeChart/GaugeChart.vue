@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import { GaugeChart } from './GaugeChart.core';
 import { convertValueToPercentage } from './utils';
@@ -19,6 +19,10 @@ const isMounted = ref<boolean>(false);
 
 let gaugeChartInstance: GaugeChart | null = null;
 
+const resizeObserver = new ResizeObserver(() => {
+  gaugeChartInstance?.resize();
+});
+
 onMounted(() => {
   const percentageValue = convertValueToPercentage(props.value, props.maxValue, props.minValue);
   gaugeChartInstance = new GaugeChart({
@@ -30,6 +34,12 @@ onMounted(() => {
 
   gaugeChartInstance.drawChart();
   isMounted.value = true;
+
+  resizeObserver.observe(wrapperRef.value as HTMLDivElement);
+});
+
+onBeforeUnmount(() => {
+  resizeObserver.unobserve(wrapperRef.value as HTMLDivElement);
 });
 
 watch(props, () => {

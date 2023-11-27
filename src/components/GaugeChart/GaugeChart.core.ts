@@ -33,8 +33,8 @@ export class GaugeChart {
   wrapperDOM: HTMLDivElement;
   canvasDOM: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  canvasWidth: number;
-  canvasHeight: number;
+  canvasWidth!: number;
+  canvasHeight!: number;
 
   /* Animation-related Options */
   animationFrameEventId: number = 0;
@@ -51,13 +51,11 @@ export class GaugeChart {
 
     this.wrapperDOM.style.width = '100%';
     this.wrapperDOM.style.height = '100%';
-    this.wrapperDOM.style.border = '1px solid black';
+    this.wrapperDOM.style.border = '1px solid black'; // TODO: for debug
     this.canvasDOM.style.display = 'block';
-    this.canvasDOM.width = this.wrapperDOM.clientWidth;
-    this.canvasDOM.height = this.wrapperDOM.clientHeight;
 
-    this.canvasWidth = this.canvasDOM.width;
-    this.canvasHeight = this.canvasDOM.height;
+    this.#initializeSize();
+    this.ctx.imageSmoothingEnabled = true;
   }
 
   #initialize(args: GaugeChartArgs, isFirstTime?: boolean) {
@@ -68,17 +66,22 @@ export class GaugeChart {
     this.percentageValue = args.percentageValue;
   }
 
+  #initializeSize() {
+    const dpr = window.devicePixelRatio || 1;
+    this.canvasDOM.width = this.wrapperDOM.clientWidth * dpr;
+    this.canvasDOM.height = this.wrapperDOM.clientHeight * dpr;
+    this.canvasWidth = this.canvasDOM.width;
+    this.canvasHeight = this.canvasDOM.height;
+  }
+
   update(newArgs: GaugeChartUpdateArgs) {
     this.#initialize(newArgs);
 
     this.drawChart();
   }
 
-  resize(width: number, height: number) {
-    this.canvasDOM.width = width;
-    this.canvasDOM.height = height;
-    this.canvasWidth = this.canvasDOM.width;
-    this.canvasHeight = this.canvasDOM.height;
+  resize() {
+    this.#initializeSize();
 
     this.drawChart();
   }
