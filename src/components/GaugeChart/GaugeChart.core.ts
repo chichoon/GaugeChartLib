@@ -1,4 +1,5 @@
 import {
+  checkDegreeInRange,
   convertRGBToHex,
   convertValueToDegree,
   convertValueToGradientColor,
@@ -104,8 +105,11 @@ export class GaugeChart {
       this.#drawOnError();
       return;
     }
+
+    this.wrapperDOM.removeEventListener('mousemove', this.onMouseHover.bind(this));
     const DELTA = (this.percentageValue - this.previousValue) / 60;
     this.#drawChartWithAnimation(this.previousValue, DELTA);
+    this.wrapperDOM.addEventListener('mousemove', this.onMouseHover.bind(this));
   }
 
   #drawChartWithAnimation(value: number, delta: number) {
@@ -131,7 +135,7 @@ export class GaugeChart {
     );
   }
 
-  #drawGauge(value: number) {
+  #drawGauge(value: number, hasBoundary?: boolean) {
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
     const END_DEGREE = convertValueToDegree(value);
@@ -148,10 +152,11 @@ export class GaugeChart {
       RADIUS,
       135,
       END_DEGREE,
-      WIDTH,
+      hasBoundary ? WIDTH + 4 : WIDTH,
       CURRENT_COLOR,
       this.hasShadow
     );
+
     drawSector(
       this.ctx,
       this.canvasWidth / 2,
@@ -168,10 +173,13 @@ export class GaugeChart {
   #drawText(value: number) {
     const TEXT = value.toFixed(1);
     const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
+    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
+    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
+
     drawText(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2 + 5,
+      this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
       TEXT_SIZE,
       `${TEXT}%`,
       'black',
@@ -182,6 +190,7 @@ export class GaugeChart {
 
   #drawOnError() {
     this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+
     drawText(
       this.ctx,
       this.canvasWidth / 2,
@@ -192,5 +201,27 @@ export class GaugeChart {
       4,
       'white'
     );
+  }
+
+  onMouseHover(e: Event) {
+    const { offsetX, offsetY } = e as MouseEvent;
+    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
+    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
+    const END_DEGREE =
+      Math.atan2(offsetY - this.canvasHeight / 2, offsetX - this.canvasWidth / 2) * (180 / Math.PI);
+    const VALUE_DEGREE = convertValueToDegree(this.percentageValue);
+
+    const DISTANCE = Math.sqrt(
+      Math.pow(offsetX - this.canvasWidth / 2, 2) +
+        Math.pow(offsetY - this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2, 2)
+    );
+
+    const isMouseOnGauge =
+      DISTANCE <= RADIUS + WIDTH / 2 &&
+      DISTANCE >= RADIUS - WIDTH / 2 &&
+      checkDegreeInRange(END_DEGREE, VALUE_DEGREE);
+
+    this.#drawGauge(this.percentageValue, isMouseOnGauge);
+    this.#drawText(this.percentageValue);
   }
 }
