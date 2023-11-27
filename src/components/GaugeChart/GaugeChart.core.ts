@@ -144,7 +144,7 @@ export class GaugeChart {
     drawSector(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2,
+      this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
       RADIUS,
       135,
       END_DEGREE,
@@ -155,7 +155,7 @@ export class GaugeChart {
     drawSector(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2,
+      this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
       RADIUS,
       END_DEGREE,
       45,
