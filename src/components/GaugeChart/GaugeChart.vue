@@ -7,6 +7,10 @@ import { convertValueToPercentage, debounce } from './utils';
 interface Props {
   startColor: string;
   endColor: string;
+  backgroundColor?: string;
+  hasShadow?: boolean;
+  borderColor?: string;
+  textColor?: string;
   value: number;
   minValue?: number;
   maxValue: number;
@@ -29,6 +33,10 @@ onMounted(() => {
     target: wrapperRef.value as HTMLDivElement, // TODO: No Type Assertion
     startColor: props.startColor,
     endColor: props.endColor,
+    backgroundColor: props.backgroundColor,
+    borderColor: props.borderColor,
+    textColor: props.textColor,
+    hasShadow: props.hasShadow,
     percentageValue
   });
 

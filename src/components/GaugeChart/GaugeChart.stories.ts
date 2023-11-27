@@ -9,6 +9,7 @@ const meta = {
   argTypes: {
     startColor: { control: 'color' },
     endColor: { control: 'color' },
+    backgroundColor: { control: 'color' },
     value: { control: 'number' },
     minValue: { control: 'number' },
     maxValue: { control: 'number' }
@@ -30,6 +31,29 @@ export const Default: Story = {
   args: {
     startColor: '#220AFA',
     endColor: '#8CC7F9',
+    value: 35,
+    minValue: 0,
+    maxValue: 100
+  }
+};
+
+export const WithBackground: Story = {
+  args: {
+    startColor: '#FFFFFF',
+    endColor: '#CCCCCC',
+    backgroundColor: '#123456',
+    value: 35,
+    minValue: 0,
+    maxValue: 100
+  }
+};
+
+export const WithShadow: Story = {
+  args: {
+    startColor: '#FFFFFF',
+    endColor: '#CCCCCC',
+    backgroundColor: '#FFFFFF',
+    hasShadow: true,
     value: 35,
     minValue: 0,
     maxValue: 100

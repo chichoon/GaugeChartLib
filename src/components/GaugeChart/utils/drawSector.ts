@@ -8,7 +8,8 @@ export function drawSector(
   startAngle: number,
   endAngle: number,
   width: number,
-  color: string
+  color: string,
+  hasShadow?: boolean
 ) {
   const startRadian = convertToRadians(startAngle);
   const endRadian = convertToRadians(endAngle);
@@ -24,6 +25,8 @@ export function drawSector(
 
   ctx.strokeStyle = color; // 선의 색상을 지정한다
   ctx.stroke(); // 지정한 strokeStyle 으로 경로를 따라 실제 선을 그려낸다
+
+  if (!hasShadow) return; // 그림자가 없을 경우 하위 코드 실행 X
 
   // =============== 클리핑 영역 ===============
   ctx.save(); // 현재의 그리기 영역을 저장한다

@@ -10,6 +10,10 @@ import {
 interface GaugeChartArgs {
   startColor: string;
   endColor: string;
+  backgroundColor?: string;
+  hasShadow?: boolean;
+  borderColor?: string;
+  textColor?: string;
   percentageValue: number;
 }
 
@@ -23,6 +27,10 @@ export class GaugeChart {
   /* Chart Values */
   startColor!: string;
   endColor!: string;
+  backgroundColor!: string;
+  hasShadow!: boolean;
+  borderColor!: string;
+  textColor!: string;
   percentageValue!: number;
   previousValue!: number;
 
@@ -51,7 +59,6 @@ export class GaugeChart {
 
     this.wrapperDOM.style.width = '100%';
     this.wrapperDOM.style.height = '100%';
-    this.wrapperDOM.style.border = '1px solid black'; // TODO: for debug
     this.canvasDOM.style.display = 'block';
 
     this.#initializeSize();
@@ -63,6 +70,10 @@ export class GaugeChart {
 
     this.startColor = args.startColor;
     this.endColor = args.endColor;
+    this.backgroundColor = args.backgroundColor ?? '#CCCCCC';
+    this.hasShadow = args.hasShadow ?? false;
+    this.borderColor = args.borderColor ?? '#00000000';
+    this.textColor = args.textColor ?? '#000000';
     this.percentageValue = args.percentageValue;
   }
 
@@ -88,7 +99,12 @@ export class GaugeChart {
 
   drawChart() {
     if (this.animationFrameEventId !== 0) cancelAnimationFrame(this.animationFrameEventId);
-    if (!this.startColor || !this.endColor || isNaN(this.percentageValue)) {
+    if (
+      !this.startColor ||
+      !this.endColor ||
+      this.percentageValue === undefined ||
+      isNaN(this.percentageValue)
+    ) {
       this.#drawOnError();
       return;
     }
@@ -137,7 +153,7 @@ export class GaugeChart {
       133,
       47,
       WIDTH,
-      'white'
+      this.borderColor
     );
     drawSector(
       this.ctx,
@@ -147,7 +163,8 @@ export class GaugeChart {
       135,
       END_DEGREE,
       WIDTH,
-      CURRENT_COLOR
+      CURRENT_COLOR,
+      this.hasShadow
     );
     drawSector(
       this.ctx,
@@ -157,7 +174,8 @@ export class GaugeChart {
       END_DEGREE,
       45,
       WIDTH,
-      '#CCCCCC'
+      this.backgroundColor,
+      this.hasShadow
     );
   }
 
@@ -172,7 +190,7 @@ export class GaugeChart {
       `${TEXT}%`,
       'black',
       4,
-      'white'
+      this.borderColor
     );
   }
 
