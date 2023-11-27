@@ -71,6 +71,9 @@ export class GaugeChart {
   }
 
   #initializeDOMStyle() {
+    this.canvasDOM.style.display = 'block';
+    this.canvasDOM.style.margin = '0 auto';
+    this.canvasDOM.style.aspectRatio = '1 / 1';
     this.tooltipDOM.style.position = 'fixed';
     this.tooltipDOM.style.display = 'none';
     this.tooltipDOM.style.pointerEvents = 'none';
@@ -80,9 +83,6 @@ export class GaugeChart {
     this.tooltipDOM.style.fontSize = '14px';
     this.tooltipDOM.style.color = 'white';
     this.tooltipDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    this.canvasDOM.style.display = 'block';
-    this.canvasDOM.style.margin = '0 auto';
-    this.canvasDOM.style.aspectRatio = '1 / 1';
   }
 
   #initializeSize() {
@@ -148,7 +148,7 @@ export class GaugeChart {
 
   #drawGauge(value: number, hasBoundary?: boolean) {
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
-    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
+    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
     const END_DEGREE = convertValueToDegree(value);
     const CURRENT_COLOR = convertRGBToHex(
       convertValueToGradientColor(this.startColor, this.endColor, value)
@@ -185,7 +185,7 @@ export class GaugeChart {
     const TEXT = value.toFixed(1);
     const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
-    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
+    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
 
     drawText(
       this.ctx,
@@ -217,7 +217,7 @@ export class GaugeChart {
   onMouseHover(e: Event) {
     const { offsetX, offsetY, clientX, clientY } = e as MouseEvent;
     const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
-    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2;
+    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
     const END_DEGREE =
       Math.atan2(offsetY - this.canvasHeight / 2, offsetX - this.canvasWidth / 2) * (180 / Math.PI);
     const VALUE_DEGREE = convertValueToDegree(this.percentageValue);
