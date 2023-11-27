@@ -29,7 +29,7 @@ const resizeObserver = new ResizeObserver(() => {
 onMounted(() => {
   const percentageValue = convertValueToPercentage(props.value, props.maxValue, props.minValue);
   gaugeChartInstance = new GaugeChart({
-    target: wrapperRef.value as HTMLDivElement, // TODO: No Type Assertion
+    target: wrapperRef.value as HTMLDivElement,
     startColor: props.startColor,
     endColor: props.endColor,
     backgroundColor: props.backgroundColor,

@@ -53,26 +53,13 @@ export class GaugeChart {
     this.wrapperDOM = document.createElement('div');
     this.canvasDOM = document.createElement('canvas');
     this.tooltipDOM = document.createElement('div');
-    document.body.appendChild(this.tooltipDOM);
     this.wrapperDOM.appendChild(this.canvasDOM);
     this.target.appendChild(this.wrapperDOM);
+    document.body.appendChild(this.tooltipDOM);
     this.ctx = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D;
 
-    this.wrapperDOM.style.width = '100%';
-    this.wrapperDOM.style.height = '100%';
-    this.tooltipDOM.style.position = 'fixed';
-    this.tooltipDOM.style.display = 'none';
-    this.tooltipDOM.style.pointerEvents = 'none';
-    this.tooltipDOM.style.padding = '10px 5px';
-    this.tooltipDOM.style.borderRadius = '5px';
-    this.tooltipDOM.style.zIndex = '20';
-    this.tooltipDOM.style.fontSize = '14px';
-    this.tooltipDOM.style.color = 'white';
-    this.tooltipDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    this.canvasDOM.style.display = 'block';
-
+    this.#initializeDOMStyle();
     this.#initializeSize();
-    this.ctx.imageSmoothingEnabled = true;
   }
 
   #initialize(args: GaugeChartArgs, isFirstTime?: boolean) {
@@ -86,10 +73,29 @@ export class GaugeChart {
     this.percentageValue = args.percentageValue;
   }
 
+  #initializeDOMStyle() {
+    this.wrapperDOM.style.width = '100%';
+    this.wrapperDOM.style.height = '100%';
+    this.tooltipDOM.style.position = 'fixed';
+    this.tooltipDOM.style.display = 'none';
+    this.tooltipDOM.style.pointerEvents = 'none';
+    this.tooltipDOM.style.padding = '10px 5px';
+    this.tooltipDOM.style.borderRadius = '5px';
+    this.tooltipDOM.style.zIndex = '20';
+    this.tooltipDOM.style.fontSize = '14px';
+    this.tooltipDOM.style.color = 'white';
+    this.tooltipDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    this.canvasDOM.style.width = '100%';
+    this.canvasDOM.style.height = '100%';
+    this.canvasDOM.style.display = 'block';
+    // this.canvasDOM.style.aspectRatio = '1 / 1';
+  }
+
   #initializeSize() {
-    const dpr = window.devicePixelRatio || 1;
-    this.canvasDOM.width = this.wrapperDOM.clientWidth * dpr;
-    this.canvasDOM.height = this.wrapperDOM.clientHeight * dpr;
+    const DPR = window.devicePixelRatio || 1;
+    const SIZE = Math.min(this.canvasDOM.clientWidth, this.canvasDOM.clientHeight);
+    this.canvasDOM.width = SIZE * DPR;
+    this.canvasDOM.height = SIZE * DPR;
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
   }
