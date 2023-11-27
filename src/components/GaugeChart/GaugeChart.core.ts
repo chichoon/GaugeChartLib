@@ -176,7 +176,7 @@ export class GaugeChart {
       `${TEXT}%`,
       'black',
       4,
-      this.borderColor
+      'white'
     );
   }
 
