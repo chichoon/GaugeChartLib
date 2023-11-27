@@ -58,7 +58,8 @@ watch(props, () => {
 
 <style scoped lang="scss">
 .gauge-chart {
-  width: calc(100%);
-  height: calc(100%);
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 </style>

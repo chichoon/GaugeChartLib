@@ -17,7 +17,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/gauge-chart-lib.js",
       "require": "./dist/gauge-chart-lib.umd.cjs"
-    }
+    },
+    "./style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",
