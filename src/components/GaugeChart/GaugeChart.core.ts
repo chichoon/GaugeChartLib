@@ -38,6 +38,7 @@ export class GaugeChart {
   /* Canvas-related options */
   wrapperDOM: HTMLDivElement;
   canvasDOM: HTMLCanvasElement;
+  tooltipDOM: HTMLDivElement;
   ctx: CanvasRenderingContext2D;
   canvasWidth!: number;
   canvasHeight!: number;
@@ -51,12 +52,21 @@ export class GaugeChart {
 
     this.wrapperDOM = document.createElement('div');
     this.canvasDOM = document.createElement('canvas');
+    this.tooltipDOM = document.createElement('div');
+    document.body.appendChild(this.tooltipDOM);
     this.wrapperDOM.appendChild(this.canvasDOM);
     this.target.appendChild(this.wrapperDOM);
     this.ctx = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D;
 
     this.wrapperDOM.style.width = '100%';
     this.wrapperDOM.style.height = '100%';
+    this.tooltipDOM.style.position = 'fixed';
+    this.tooltipDOM.style.display = 'none';
+    this.tooltipDOM.style.pointerEvents = 'none';
+    this.tooltipDOM.style.padding = '10px 5px';
+    this.tooltipDOM.style.borderRadius = '5px';
+    this.tooltipDOM.style.color = 'white';
+    this.tooltipDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
     this.canvasDOM.style.display = 'block';
 
     this.#initializeSize();
@@ -223,5 +233,9 @@ export class GaugeChart {
 
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
     this.#drawText(this.percentageValue);
+    this.tooltipDOM.style.display = isMouseOnGauge ? 'block' : 'none';
+    this.tooltipDOM.style.top = `${offsetY}px`;
+    this.tooltipDOM.style.left = `${offsetX + 30}px`;
+    this.tooltipDOM.innerText = `${this.percentageValue.toFixed(1)}%`;
   }
 }
