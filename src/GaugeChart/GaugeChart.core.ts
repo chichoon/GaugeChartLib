@@ -72,8 +72,9 @@ export class GaugeChart {
 
   #initializeDOMStyle() {
     this.canvasDOM.style.display = 'block';
-    this.canvasDOM.style.margin = '0 auto';
     this.canvasDOM.style.aspectRatio = '1 / 1';
+    this.canvasDOM.style.width = '100%';
+    this.canvasDOM.style.height = '100%';
     this.tooltipDOM.style.position = 'fixed';
     this.tooltipDOM.style.display = 'none';
     this.tooltipDOM.style.pointerEvents = 'none';
@@ -86,7 +87,7 @@ export class GaugeChart {
   }
 
   #initializeSize() {
-    const SIZE = Math.min(this.target.clientWidth, this.target.clientHeight);
+    const SIZE = Math.min(this.canvasDOM.clientWidth, this.canvasDOM.clientHeight);
     this.canvasDOM.width = SIZE;
     this.canvasDOM.height = SIZE;
     this.canvasWidth = this.canvasDOM.width;
