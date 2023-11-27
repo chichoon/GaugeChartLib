@@ -60,6 +60,19 @@ export const WithShadow: Story = {
   }
 };
 
+export const WithBorder: Story = {
+  args: {
+    startColor: '#FFFFFF',
+    endColor: '#CCCCCC',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#AAAAAA',
+    hasShadow: true,
+    value: 35,
+    minValue: 0,
+    maxValue: 100
+  }
+};
+
 export const WithMinValue: Story = {
   args: {
     startColor: '#FA840A',

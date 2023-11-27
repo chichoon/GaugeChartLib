@@ -15,6 +15,14 @@ export function convertHexToRGB(color: string): Color {
       G: parseInt(`${g1}${g2}`, 16),
       B: parseInt(`${b1}${b2}`, 16)
     };
+  } else if (color.length === 9) {
+    const [_, r1, r2, g1, g2, b1, b2, a1, a2] = color;
+    return {
+      R: parseInt(`${r1}${r2}`, 16),
+      G: parseInt(`${g1}${g2}`, 16),
+      B: parseInt(`${b1}${b2}`, 16),
+      A: parseInt(`${a1}${a2}`, 16)
+    };
   }
   throw new Error('Invalid color format.');
 }

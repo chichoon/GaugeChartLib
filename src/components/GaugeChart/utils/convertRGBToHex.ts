@@ -6,6 +6,11 @@ function convertToHex(num: number): string {
 }
 
 export function convertRGBToHex(color: Color): string {
+  if (color.A) {
+    const { R, G, B, A } = color;
+    return `#${convertToHex(R)}${convertToHex(G)}${convertToHex(B)}${convertToHex(A)}`;
+  }
+
   const { R, G, B } = color;
   return `#${convertToHex(R)}${convertToHex(G)}${convertToHex(B)}`;
 }
