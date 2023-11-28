@@ -1,6 +1,5 @@
 import {
   checkDegreeInRange,
-  convertRGBToHex,
   convertValueToDegree,
   convertValueToGradientColor,
   drawSector,
@@ -8,14 +7,14 @@ import {
 } from './utils';
 
 interface GaugeChartArgs {
+  percentageValue: number;
   startColor: string;
-  endColor: string;
+  endColor?: string;
   backgroundColor?: string;
   hasShadow?: boolean;
   primaryTextColor?: string;
   secondaryTextColor?: string;
   isTextGradient?: boolean;
-  percentageValue: number;
 }
 
 export interface GaugeChartInitialArgs extends GaugeChartArgs {
@@ -67,7 +66,7 @@ export class GaugeChart {
     if (isFirstTime) this.previousValue = 0;
 
     this.startColor = args.startColor;
-    this.endColor = args.endColor;
+    this.endColor = args.endColor ?? args.startColor;
     this.backgroundColor = args.backgroundColor ?? '#CCCCCC';
     this.hasShadow = args.hasShadow ?? false;
     this.primaryTextColor = args.primaryTextColor ?? '#000000';
@@ -162,9 +161,7 @@ export class GaugeChart {
   #drawGauge(value: number, hasBoundary?: boolean) {
     const { WIDTH, RADIUS } = this.#getSizes();
     const END_DEGREE = convertValueToDegree(value);
-    const CURRENT_COLOR = convertRGBToHex(
-      convertValueToGradientColor(this.startColor, this.endColor, value)
-    );
+    const CURRENT_COLOR = this.#getCurrentColor(value);
 
     this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
@@ -197,9 +194,7 @@ export class GaugeChart {
     const TEXT = value.toFixed(1).toString();
     const { RADIUS, TEXT_SIZE } = this.#getSizes();
     const HEIGHT = this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2;
-    const CURRENT_COLOR = this.isTextGradient
-      ? convertRGBToHex(convertValueToGradientColor(this.startColor, this.endColor, value))
-      : this.primaryTextColor;
+    const CURRENT_COLOR = this.#getCurrentColor(value, true);
 
     drawText(this.ctx, this.canvasWidth / 2, HEIGHT, TEXT_SIZE, TEXT, CURRENT_COLOR, 4, 'white');
 
@@ -210,7 +205,7 @@ export class GaugeChart {
       TEXT_SIZE / 2,
       'percent',
       this.secondaryTextColor,
-      4,
+      1,
       'white'
     );
   }
@@ -267,5 +262,16 @@ export class GaugeChart {
     const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
 
     return { WIDTH, RADIUS, TEXT_SIZE };
+  }
+
+  #getCurrentColor(value: number, isText?: boolean) {
+    if (isText) {
+      if (this.isTextGradient) {
+        if (this.startColor === this.endColor) return this.startColor;
+        return convertValueToGradientColor(this.startColor, this.endColor, value);
+      } else return this.primaryTextColor;
+    }
+    if (this.startColor === this.endColor) return this.startColor;
+    return convertValueToGradientColor(this.startColor, this.endColor, value);
   }
 }

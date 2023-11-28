@@ -1,4 +1,4 @@
-import { convertStringToRGB } from '.';
+import { convertRGBToHex, convertStringToRGB } from '.';
 import { convertHexToRGB } from './convertHexToRGB';
 
 export function convertValueToGradientColor(startColor: string, endColor: string, value: number) {
@@ -11,17 +11,17 @@ export function convertValueToGradientColor(startColor: string, endColor: string
     : convertStringToRGB(endColor);
 
   if (startColorRGB.A && endColorRGB.A) {
-    return {
+    return convertRGBToHex({
       R: startColorRGB.R + (endColorRGB.R - startColorRGB.R) * ratio,
       G: startColorRGB.G + (endColorRGB.G - startColorRGB.G) * ratio,
       B: startColorRGB.B + (endColorRGB.B - startColorRGB.B) * ratio,
       A: startColorRGB.A + (endColorRGB.A - startColorRGB.A) * ratio
-    };
+    });
   }
 
-  return {
+  return convertRGBToHex({
     R: startColorRGB.R + (endColorRGB.R - startColorRGB.R) * ratio,
     G: startColorRGB.G + (endColorRGB.G - startColorRGB.G) * ratio,
     B: startColorRGB.B + (endColorRGB.B - startColorRGB.B) * ratio
-  };
+  });
 }

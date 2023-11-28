@@ -19,7 +19,6 @@ const meta = {
   },
   args: {
     startColor: '#FF0000',
-    endColor: '#00FF00',
     value: 0,
     minValue: 0,
     maxValue: 120,
@@ -33,6 +32,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {
+    startColor: '#333333',
+    value: 35,
+    minValue: 0,
+    maxValue: 100
+  }
+};
+
+export const WithEndColor: Story = {
   args: {
     startColor: '#220AFA',
     endColor: '#8CC7F9',
@@ -90,8 +98,8 @@ export const WithSecondaryTextColor: Story = {
 
 export const WithTextGradient: Story = {
   args: {
-    startColor: '#441539',
-    endColor: '#15bf47',
+    startColor: '#001500',
+    endColor: '#ff90ff',
     isTextGradient: true,
     value: 165,
     minValue: 100,

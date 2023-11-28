@@ -6,7 +6,7 @@ import { convertValueToPercentage, debounce } from './utils';
 
 interface Props {
   startColor: string;
-  endColor: string;
+  endColor?: string;
   backgroundColor?: string;
   hasShadow?: boolean;
   primaryTextColor?: string;
