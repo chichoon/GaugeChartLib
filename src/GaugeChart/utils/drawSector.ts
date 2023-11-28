@@ -11,14 +11,15 @@ export function drawSector(
   color: string,
   hasShadow?: boolean
 ) {
-  const startRadian = convertToRadians(startAngle);
-  const endRadian = convertToRadians(endAngle);
+  const START_RADIAN = convertToRadians(startAngle);
+  const END_RADIAN = convertToRadians(endAngle);
+  const RADIUS_INNER_SIZE = radius - width / 2 < 0 ? 0 : radius - width / 2;
 
   ctx.lineWidth = width;
   ctx.lineCap = 'butt';
   ctx.beginPath();
 
-  ctx.arc(cx, cy, radius, startRadian, endRadian);
+  ctx.arc(cx, cy, radius, START_RADIAN, END_RADIAN);
   ctx.strokeStyle = color;
   ctx.stroke();
 
@@ -26,8 +27,8 @@ export function drawSector(
 
   ctx.save();
   const region = new Path2D();
-  region.arc(cx, cy, radius - width / 2, startRadian, endRadian);
-  region.arc(cx, cy, radius + width / 2, endRadian, startRadian, true);
+  region.arc(cx, cy, RADIUS_INNER_SIZE, START_RADIAN, END_RADIAN);
+  region.arc(cx, cy, radius + width / 2, END_RADIAN, START_RADIAN, true);
 
   ctx.clip(region, 'nonzero');
 
@@ -39,11 +40,11 @@ export function drawSector(
   ctx.shadowOffsetY = 0;
   ctx.lineCap = 'butt';
   ctx.beginPath();
-  ctx.arc(cx, cy, radius + width / 2, startRadian, endRadian);
+  ctx.arc(cx, cy, radius + width / 2, START_RADIAN, END_RADIAN);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.arc(cx, cy, radius - width / 2, startRadian, endRadian);
+  ctx.arc(cx, cy, RADIUS_INNER_SIZE, START_RADIAN, END_RADIAN);
   ctx.stroke();
 
   ctx.restore();

@@ -12,6 +12,10 @@ interface Props {
   primaryTextColor?: string;
   secondaryTextColor?: string;
   isTextGradient?: boolean;
+  primaryTextBorderColor?: string;
+  primaryTextBorderWidth?: number;
+  secondaryTextBorderColor?: string;
+  secondaryTextBorderWidth?: number;
   value: number;
   minValue?: number;
   maxValue: number;
@@ -37,6 +41,10 @@ onMounted(() => {
     backgroundColor: props.backgroundColor,
     primaryTextColor: props.primaryTextColor,
     secondaryTextColor: props.secondaryTextColor,
+    primaryTextBorderColor: props.primaryTextBorderColor,
+    primaryTextBorderWidth: props.primaryTextBorderWidth,
+    secondaryTextBorderColor: props.secondaryTextBorderColor,
+    secondaryTextBorderWidth: props.secondaryTextBorderWidth,
     isTextGradient: props.isTextGradient,
     hasShadow: props.hasShadow,
     percentageValue

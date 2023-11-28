@@ -12,7 +12,11 @@ const meta = {
     backgroundColor: { control: 'color' },
     hasShadow: { control: 'boolean' },
     primaryTextColor: { control: 'color' },
+    primaryTextBorderColor: { control: 'color' },
+    primaryTextBorderWidth: { control: 'number' },
     secondaryTextColor: { control: 'color' },
+    secondaryTextBorderColor: { control: 'color' },
+    secondaryTextBorderWidth: { control: 'number' },
     value: { control: 'number' },
     minValue: { control: 'number' },
     maxValue: { control: 'number' }
@@ -90,6 +94,32 @@ export const WithSecondaryTextColor: Story = {
     endColor: '#330098',
     primaryTextColor: '#660a17',
     secondaryTextColor: '#88008866',
+    value: 165,
+    minValue: 100,
+    maxValue: 200
+  }
+};
+
+export const WithPrimaryTextBorder: Story = {
+  args: {
+    startColor: '#ffffff',
+    endColor: '#880011',
+    primaryTextColor: '#ffffff',
+    primaryTextBorderColor: '#ff0000',
+    primaryTextBorderWidth: 4,
+    value: 165,
+    minValue: 100,
+    maxValue: 200
+  }
+};
+
+export const WithSecondaryTextBorder: Story = {
+  args: {
+    startColor: '#00ff00',
+    endColor: '#ff0000',
+    secondaryTextColor: '#ff0000',
+    secondaryTextBorderColor: '#00ff00',
+    secondaryTextBorderWidth: 4,
     value: 165,
     minValue: 100,
     maxValue: 200

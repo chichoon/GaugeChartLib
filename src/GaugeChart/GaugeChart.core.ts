@@ -1,6 +1,5 @@
 import {
   checkDegreeInRange,
-  convertToRadians,
   convertValueToDegree,
   convertValueToGradientColor,
   drawSector,
@@ -15,6 +14,10 @@ interface GaugeChartArgs {
   hasShadow?: boolean;
   primaryTextColor?: string;
   secondaryTextColor?: string;
+  primaryTextBorderColor?: string;
+  primaryTextBorderWidth?: number;
+  secondaryTextBorderColor?: string;
+  secondaryTextBorderWidth?: number;
   isTextGradient?: boolean;
 }
 
@@ -35,6 +38,10 @@ export class GaugeChart {
   isTextGradient!: boolean;
   percentageValue!: number;
   previousValue!: number;
+  primaryTextBorderColor?: string;
+  primaryTextBorderWidth?: number;
+  secondaryTextBorderColor?: string;
+  secondaryTextBorderWidth?: number;
 
   /* target DOM */
   target: HTMLDivElement;
@@ -74,6 +81,10 @@ export class GaugeChart {
     this.hasShadow = args.hasShadow ?? false;
     this.primaryTextColor = args.primaryTextColor ?? '#000000';
     this.secondaryTextColor = args.secondaryTextColor ?? '#00000066';
+    this.primaryTextBorderColor = args.primaryTextBorderColor;
+    this.primaryTextBorderWidth = args.primaryTextBorderWidth;
+    this.secondaryTextBorderColor = args.secondaryTextBorderColor;
+    this.secondaryTextBorderWidth = args.secondaryTextBorderWidth;
     this.isTextGradient = args.isTextGradient ?? false;
     this.percentageValue = args.percentageValue;
   }
@@ -199,7 +210,16 @@ export class GaugeChart {
     const HEIGHT = this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2;
     const CURRENT_COLOR = this.#getCurrentColor(value, true);
 
-    drawText(this.ctx, this.canvasWidth / 2, HEIGHT, TEXT_SIZE, TEXT, CURRENT_COLOR, 4, 'white');
+    drawText(
+      this.ctx,
+      this.canvasWidth / 2,
+      HEIGHT,
+      TEXT_SIZE,
+      TEXT,
+      CURRENT_COLOR,
+      this.primaryTextBorderWidth,
+      this.primaryTextBorderColor
+    );
 
     drawText(
       this.ctx,
@@ -208,8 +228,8 @@ export class GaugeChart {
       TEXT_SIZE / 2,
       'percent',
       this.secondaryTextColor,
-      1,
-      'white'
+      this.secondaryTextBorderWidth,
+      this.secondaryTextBorderColor
     );
   }
 
@@ -248,22 +268,9 @@ export class GaugeChart {
       DISTANCE <= RADIUS + WIDTH / 2 &&
       DISTANCE >= RADIUS - WIDTH / 2 &&
       checkDegreeInRange(CURSOR_DEGREE, END_DEGREE);
-    console.log(CURSOR_DEGREE, END_DEGREE, checkDegreeInRange(CURSOR_DEGREE, END_DEGREE));
 
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
     this.#drawText(this.percentageValue);
-
-    // this.ctx.beginPath();
-    // this.ctx.arc(
-    //   this.canvasWidth / 2,
-    //   this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
-    //   RADIUS,
-    //   0,
-    //   convertToRadians(CURSOR_DEGREE)
-    // );
-    // this.ctx.lineWidth = 4;
-    // this.ctx.strokeStyle = 'black';
-    // this.ctx.stroke();
 
     this.tooltipDOM.style.display = isMouseOnGauge ? 'block' : 'none';
     this.tooltipDOM.style.top = `${clientY}px`;
