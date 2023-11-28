@@ -11,7 +11,8 @@ const meta = {
     endColor: { control: 'color' },
     backgroundColor: { control: 'color' },
     hasShadow: { control: 'boolean' },
-    textColor: { control: 'color' },
+    primaryTextColor: { control: 'color' },
+    secondaryTextColor: { control: 'color' },
     value: { control: 'number' },
     minValue: { control: 'number' },
     maxValue: { control: 'number' }
@@ -23,7 +24,7 @@ const meta = {
     minValue: 0,
     maxValue: 120,
     hasShadow: false,
-    textColor: '#000000'
+    primaryTextColor: '#000000'
   }
 } satisfies Meta<typeof GaugeChart>;
 
@@ -61,6 +62,40 @@ export const WithShadow: Story = {
     value: 35,
     minValue: 0,
     maxValue: 100
+  }
+};
+
+export const WithPrimaryTextColor: Story = {
+  args: {
+    startColor: '#45aeff',
+    endColor: '#88ca47',
+    primaryTextColor: '#abcdef',
+    value: 165,
+    minValue: 100,
+    maxValue: 200
+  }
+};
+
+export const WithSecondaryTextColor: Story = {
+  args: {
+    startColor: '#87aebf',
+    endColor: '#330098',
+    primaryTextColor: '#660a17',
+    secondaryTextColor: '#88008866',
+    value: 165,
+    minValue: 100,
+    maxValue: 200
+  }
+};
+
+export const WithTextGradient: Story = {
+  args: {
+    startColor: '#441539',
+    endColor: '#15bf47',
+    isTextGradient: true,
+    value: 165,
+    minValue: 100,
+    maxValue: 200
   }
 };
 

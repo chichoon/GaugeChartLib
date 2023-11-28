@@ -12,7 +12,9 @@ interface GaugeChartArgs {
   endColor: string;
   backgroundColor?: string;
   hasShadow?: boolean;
-  textColor?: string;
+  primaryTextColor?: string;
+  secondaryTextColor?: string;
+  isTextGradient?: boolean;
   percentageValue: number;
 }
 
@@ -28,7 +30,9 @@ export class GaugeChart {
   endColor!: string;
   backgroundColor!: string;
   hasShadow!: boolean;
-  textColor!: string;
+  primaryTextColor!: string;
+  secondaryTextColor!: string;
+  isTextGradient!: boolean;
   percentageValue!: number;
   previousValue!: number;
 
@@ -66,7 +70,9 @@ export class GaugeChart {
     this.endColor = args.endColor;
     this.backgroundColor = args.backgroundColor ?? '#CCCCCC';
     this.hasShadow = args.hasShadow ?? false;
-    this.textColor = args.textColor ?? '#000000';
+    this.primaryTextColor = args.primaryTextColor ?? '#000000';
+    this.secondaryTextColor = args.secondaryTextColor ?? '#00000066';
+    this.isTextGradient = args.isTextGradient ?? false;
     this.percentageValue = args.percentageValue;
   }
 
@@ -188,16 +194,22 @@ export class GaugeChart {
   }
 
   #drawText(value: number) {
-    const TEXT = value.toFixed(1);
+    const TEXT = value.toFixed(1).toString();
     const { RADIUS, TEXT_SIZE } = this.#getSizes();
+    const HEIGHT = this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2;
+    const CURRENT_COLOR = this.isTextGradient
+      ? convertRGBToHex(convertValueToGradientColor(this.startColor, this.endColor, value))
+      : this.primaryTextColor;
+
+    drawText(this.ctx, this.canvasWidth / 2, HEIGHT, TEXT_SIZE, TEXT, CURRENT_COLOR, 4, 'white');
 
     drawText(
       this.ctx,
       this.canvasWidth / 2,
-      this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
-      TEXT_SIZE,
-      `${TEXT}%`,
-      'black',
+      HEIGHT + TEXT_SIZE / 2 + 20,
+      TEXT_SIZE / 2,
+      'percent',
+      this.secondaryTextColor,
       4,
       'white'
     );

@@ -9,7 +9,9 @@ interface Props {
   endColor: string;
   backgroundColor?: string;
   hasShadow?: boolean;
-  textColor?: string;
+  primaryTextColor?: string;
+  secondaryTextColor?: string;
+  isTextGradient?: boolean;
   value: number;
   minValue?: number;
   maxValue: number;
@@ -33,7 +35,9 @@ onMounted(() => {
     startColor: props.startColor,
     endColor: props.endColor,
     backgroundColor: props.backgroundColor,
-    textColor: props.textColor,
+    primaryTextColor: props.primaryTextColor,
+    secondaryTextColor: props.secondaryTextColor,
+    isTextGradient: props.isTextGradient,
     hasShadow: props.hasShadow,
     percentageValue
   });
