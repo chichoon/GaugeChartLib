@@ -84,6 +84,8 @@ watch(props, () => {
 
 .canvas-dom {
   display: block;
+  position: relative;
+  z-index: 15;
 }
 
 .text-canvas-dom {
@@ -91,6 +93,7 @@ watch(props, () => {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 10;
 }
 
 .tooltip-dom {
