@@ -239,9 +239,10 @@ export class GaugeChart {
 
   #drawOnError() {
     this.chartContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.textContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     drawText(
-      this.chartContext,
+      this.textContext,
       this.canvasWidth / 2,
       this.canvasHeight / 2,
       30,
