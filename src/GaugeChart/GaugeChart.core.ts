@@ -1,5 +1,6 @@
 import {
   checkDegreeInRange,
+  convertToRadians,
   convertValueToDegree,
   convertValueToGradientColor,
   drawSector,
@@ -57,6 +58,8 @@ export class GaugeChart {
     this.target.appendChild(this.canvasDOM);
     document.body.appendChild(this.tooltipDOM);
     this.ctx = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D;
+    this.ctx.imageSmoothingEnabled = true;
+    this.ctx.imageSmoothingQuality = 'high';
 
     this.#initializeDOMStyle();
     this.#initializeSize();
@@ -229,21 +232,39 @@ export class GaugeChart {
     const { offsetX, offsetY, clientX, clientY } = e as MouseEvent;
     const { WIDTH, RADIUS } = this.#getSizes();
     const CURSOR_DEGREE =
-      Math.atan2(offsetY - this.canvasHeight / 2, offsetX - this.canvasWidth / 2) * (180 / Math.PI);
+      Math.atan2(
+        offsetY - this.canvasHeight / 2 - (this.canvasHeight / 2 - RADIUS) / 2,
+        offsetX - this.canvasWidth / 2
+      ) *
+      (180 / Math.PI);
     const END_DEGREE = convertValueToDegree(this.percentageValue);
 
     const DISTANCE = Math.sqrt(
       Math.pow(offsetX - this.canvasWidth / 2, 2) +
-        Math.pow(offsetY - this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2, 2)
+        Math.pow(offsetY - this.canvasHeight / 2 - (this.canvasHeight / 2 - RADIUS) / 2, 2)
     );
 
     const isMouseOnGauge =
       DISTANCE <= RADIUS + WIDTH / 2 &&
       DISTANCE >= RADIUS - WIDTH / 2 &&
       checkDegreeInRange(CURSOR_DEGREE, END_DEGREE);
+    console.log(CURSOR_DEGREE, END_DEGREE, checkDegreeInRange(CURSOR_DEGREE, END_DEGREE));
 
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
     this.#drawText(this.percentageValue);
+
+    // this.ctx.beginPath();
+    // this.ctx.arc(
+    //   this.canvasWidth / 2,
+    //   this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
+    //   RADIUS,
+    //   0,
+    //   convertToRadians(CURSOR_DEGREE)
+    // );
+    // this.ctx.lineWidth = 4;
+    // this.ctx.strokeStyle = 'black';
+    // this.ctx.stroke();
+
     this.tooltipDOM.style.display = isMouseOnGauge ? 'block' : 'none';
     this.tooltipDOM.style.top = `${clientY}px`;
     this.tooltipDOM.style.left = `${clientX + 20}px`;
