@@ -201,7 +201,7 @@ export class GaugeChart {
     drawText(
       this.ctx,
       this.canvasWidth / 2,
-      HEIGHT + TEXT_SIZE / 2 + 20,
+      HEIGHT + (TEXT_SIZE * 7) / 10,
       TEXT_SIZE / 2,
       'percent',
       this.secondaryTextColor,
