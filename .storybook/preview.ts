@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/vue3'
+import type { Preview } from '@storybook/vue3';
 
 const preview: Preview = {
   parameters: {
@@ -8,8 +8,11 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i
       }
+    },
+    viewport: {
+      defaultViewport: 'mobile1'
     }
   }
-}
+};
 
-export default preview
+export default preview;
