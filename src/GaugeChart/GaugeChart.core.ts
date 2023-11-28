@@ -87,9 +87,14 @@ export class GaugeChart {
   }
 
   #initializeSize() {
-    const SIZE = Math.min(this.canvasDOM.clientWidth, this.canvasDOM.clientHeight);
-    this.canvasDOM.width = SIZE;
-    this.canvasDOM.height = SIZE;
+    const DPR = window.devicePixelRatio || 1;
+    const rect = this.target.getBoundingClientRect();
+
+    const SIZE = Math.min(rect.width, rect.height) || 10;
+    this.canvasDOM.style.width = `${SIZE}px`;
+    this.canvasDOM.width = SIZE * DPR;
+    this.canvasDOM.style.height = `${SIZE}px`;
+    this.canvasDOM.height = SIZE * DPR;
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
   }

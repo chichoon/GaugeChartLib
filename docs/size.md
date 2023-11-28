@@ -1,3 +1,4 @@
 - `clientWidth`: border, scroll bar 제외 width
 - `offsetWidth`: border, scroll bar 포함 width
 - `scrollWidth`: scroll 가능 영역 포함 width
+- `getBoundingClientRect`: 요소의 크기 및 뷰포트에 상대적인 위치 정보를 제공하는 객체를 반환 (DOMRect)
