@@ -149,6 +149,7 @@ export class GaugeChart {
     const DELTA = (this.percentageValue - this.previousValue) / 60;
     this.#drawChartWithAnimation(this.previousValue, DELTA);
     this.canvasDOM.addEventListener('mousemove', this.#onMouseHover.bind(this));
+    this.canvasDOM.addEventListener('mouseleave', this.#onMouseOut.bind(this));
   }
 
   #drawChartWithAnimation(value: number, delta: number) {
@@ -281,6 +282,10 @@ export class GaugeChart {
     this.tooltipDOM.style.top = `${clientY}px`;
     this.tooltipDOM.style.left = `${clientX + 20}px`;
     this.tooltipDOM.innerText = `${this.percentageValue.toFixed(1)}%`;
+  }
+
+  #onMouseOut() {
+    this.tooltipDOM.style.display = 'none';
   }
 
   onUnmount() {
