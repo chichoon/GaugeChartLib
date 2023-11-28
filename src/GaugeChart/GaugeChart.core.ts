@@ -117,9 +117,6 @@ export class GaugeChart {
     this.textCanvasDOM.style.height = `${SIZE}px`;
     this.textCanvasDOM.height = SIZE * DPR;
 
-    this.chartContext.scale(DPR, DPR);
-    this.textContext.scale(DPR, DPR);
-
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
   }
