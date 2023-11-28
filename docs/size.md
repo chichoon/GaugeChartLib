@@ -1,0 +1,3 @@
+- `clientWidth`: border, scroll bar 제외 width
+- `offsetWidth`: border, scroll bar 포함 width
+- `scrollWidth`: scroll 가능 영역 포함 width
