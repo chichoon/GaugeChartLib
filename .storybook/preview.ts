@@ -8,10 +8,10 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i
       }
-    },
-    viewport: {
-      defaultViewport: 'mobile1'
     }
+    // viewport: {
+    //   defaultViewport: 'mobile1'
+    // }
   }
 };
 

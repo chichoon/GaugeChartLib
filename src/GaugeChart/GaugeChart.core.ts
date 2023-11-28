@@ -45,11 +45,14 @@ export class GaugeChart {
 
   /* target DOM */
   target: HTMLDivElement;
+  wrapperDOM: HTMLDivElement;
 
   /* Canvas-related options */
   canvasDOM: HTMLCanvasElement;
+  textCanvasDOM: HTMLCanvasElement;
   tooltipDOM: HTMLDivElement;
-  ctx: CanvasRenderingContext2D;
+  chartContext: CanvasRenderingContext2D;
+  textContext: CanvasRenderingContext2D;
   canvasWidth!: number;
   canvasHeight!: number;
 
@@ -60,13 +63,16 @@ export class GaugeChart {
     this.#initialize(args, true);
     this.target = args.target;
 
+    this.wrapperDOM = document.createElement('div');
     this.canvasDOM = document.createElement('canvas');
+    this.textCanvasDOM = document.createElement('canvas');
     this.tooltipDOM = document.createElement('div');
-    this.target.appendChild(this.canvasDOM);
+    this.wrapperDOM.appendChild(this.canvasDOM);
+    this.wrapperDOM.appendChild(this.textCanvasDOM);
+    this.target.appendChild(this.wrapperDOM);
     document.body.appendChild(this.tooltipDOM);
-    this.ctx = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D;
-    this.ctx.imageSmoothingEnabled = true;
-    this.ctx.imageSmoothingQuality = 'high';
+    this.chartContext = this.canvasDOM.getContext('2d') as CanvasRenderingContext2D;
+    this.textContext = this.textCanvasDOM.getContext('2d') as CanvasRenderingContext2D;
 
     this.#initializeDOMStyle();
     this.#initializeSize();
@@ -90,31 +96,27 @@ export class GaugeChart {
   }
 
   #initializeDOMStyle() {
-    this.canvasDOM.style.display = 'block';
-    this.canvasDOM.style.aspectRatio = '1 / 1';
-    this.canvasDOM.style.width = '100%';
-    this.canvasDOM.style.height = '100%';
-    this.canvasDOM.style.margin = 'auto';
-    this.tooltipDOM.style.position = 'fixed';
-    this.tooltipDOM.style.display = 'none';
-    this.tooltipDOM.style.pointerEvents = 'none';
-    this.tooltipDOM.style.padding = '10px 5px';
-    this.tooltipDOM.style.borderRadius = '5px';
-    this.tooltipDOM.style.zIndex = '20';
-    this.tooltipDOM.style.fontSize = '14px';
-    this.tooltipDOM.style.color = 'white';
-    this.tooltipDOM.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    this.wrapperDOM.className = 'wrapper-dom';
+    this.canvasDOM.className = 'canvas-dom';
+    this.textCanvasDOM.className = 'text-canvas-dom';
+    this.tooltipDOM.className = 'tooltip-dom';
   }
 
   #initializeSize() {
     const DPR = window.devicePixelRatio || 1;
-    const rect = this.target.getBoundingClientRect();
+    const RECT = this.target.getBoundingClientRect();
+    const SIZE = Math.min(RECT.width, RECT.height) || 10;
 
-    const SIZE = Math.min(rect.width, rect.height) || 10;
     this.canvasDOM.style.width = `${SIZE}px`;
     this.canvasDOM.width = SIZE * DPR;
     this.canvasDOM.style.height = `${SIZE}px`;
     this.canvasDOM.height = SIZE * DPR;
+
+    this.textCanvasDOM.style.width = `${SIZE}px`;
+    this.textCanvasDOM.width = SIZE * DPR;
+    this.textCanvasDOM.style.height = `${SIZE}px`;
+    this.textCanvasDOM.height = SIZE * DPR;
+
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
   }
@@ -177,10 +179,10 @@ export class GaugeChart {
     const END_DEGREE = convertValueToDegree(value);
     const CURRENT_COLOR = this.#getCurrentColor(value);
 
-    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.chartContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     drawSector(
-      this.ctx,
+      this.chartContext,
       this.canvasWidth / 2,
       this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
       RADIUS,
@@ -192,7 +194,7 @@ export class GaugeChart {
     );
 
     drawSector(
-      this.ctx,
+      this.chartContext,
       this.canvasWidth / 2,
       this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2,
       RADIUS,
@@ -210,8 +212,10 @@ export class GaugeChart {
     const HEIGHT = this.canvasHeight / 2 + (this.canvasHeight / 2 - RADIUS) / 2;
     const CURRENT_COLOR = this.#getCurrentColor(value, true);
 
+    this.textContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+
     drawText(
-      this.ctx,
+      this.textContext,
       this.canvasWidth / 2,
       HEIGHT,
       TEXT_SIZE,
@@ -222,7 +226,7 @@ export class GaugeChart {
     );
 
     drawText(
-      this.ctx,
+      this.textContext,
       this.canvasWidth / 2,
       HEIGHT + (TEXT_SIZE * 7) / 10,
       TEXT_SIZE / 2,
@@ -234,10 +238,10 @@ export class GaugeChart {
   }
 
   #drawOnError() {
-    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    this.chartContext.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
     drawText(
-      this.ctx,
+      this.chartContext,
       this.canvasWidth / 2,
       this.canvasHeight / 2,
       30,
@@ -270,9 +274,9 @@ export class GaugeChart {
       checkDegreeInRange(CURSOR_DEGREE, END_DEGREE);
 
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
-    this.#drawText(this.percentageValue);
 
     this.tooltipDOM.style.display = isMouseOnGauge ? 'block' : 'none';
+    if (!isMouseOnGauge) return;
     this.tooltipDOM.style.top = `${clientY}px`;
     this.tooltipDOM.style.left = `${clientX + 20}px`;
     this.tooltipDOM.innerText = `${this.percentageValue.toFixed(1)}%`;
@@ -280,7 +284,7 @@ export class GaugeChart {
 
   onUnmount() {
     this.canvasDOM.removeEventListener('mousemove', this.#onMouseHover.bind(this));
-    this.target.removeChild(this.canvasDOM);
+    this.target.removeChild(this.wrapperDOM);
     document.body.removeChild(this.tooltipDOM);
   }
 

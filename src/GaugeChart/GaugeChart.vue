@@ -69,9 +69,38 @@ watch(props, () => {
   <div ref="wrapperRef" class="gauge-chart" />
 </template>
 
-<style scoped lang="scss">
+<style>
 .gauge-chart {
   width: 100%;
   height: 100%;
+}
+
+.wrapper-dom {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.canvas-dom {
+  display: block;
+}
+
+.text-canvas-dom {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.tooltip-dom {
+  position: fixed;
+  display: none;
+  padding: 10px 5px;
+  border-radius: 5px;
+  z-index: 20;
+  font-size: 14px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 </style>
