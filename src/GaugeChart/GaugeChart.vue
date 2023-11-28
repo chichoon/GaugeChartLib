@@ -44,6 +44,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   resizeObserver.unobserve(wrapperRef.value as HTMLDivElement);
+  gaugeChartInstance?.onUnmount();
 });
 
 watch(props, () => {
@@ -58,7 +59,6 @@ watch(props, () => {
 
 <style scoped lang="scss">
 .gauge-chart {
-  display: flex;
   width: 100%;
   height: 100%;
 }

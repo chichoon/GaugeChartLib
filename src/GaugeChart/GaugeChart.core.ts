@@ -75,6 +75,7 @@ export class GaugeChart {
     this.canvasDOM.style.aspectRatio = '1 / 1';
     this.canvasDOM.style.width = '100%';
     this.canvasDOM.style.height = '100%';
+    this.canvasDOM.style.margin = 'auto';
     this.tooltipDOM.style.position = 'fixed';
     this.tooltipDOM.style.display = 'none';
     this.tooltipDOM.style.pointerEvents = 'none';
@@ -123,10 +124,10 @@ export class GaugeChart {
       return;
     }
 
-    this.canvasDOM.removeEventListener('mousemove', this.onMouseHover.bind(this));
+    this.canvasDOM.removeEventListener('mousemove', this.#onMouseHover.bind(this));
     const DELTA = (this.percentageValue - this.previousValue) / 60;
     this.#drawChartWithAnimation(this.previousValue, DELTA);
-    this.canvasDOM.addEventListener('mousemove', this.onMouseHover.bind(this));
+    this.canvasDOM.addEventListener('mousemove', this.#onMouseHover.bind(this));
   }
 
   #drawChartWithAnimation(value: number, delta: number) {
@@ -153,8 +154,7 @@ export class GaugeChart {
   }
 
   #drawGauge(value: number, hasBoundary?: boolean) {
-    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
-    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
+    const { WIDTH, RADIUS } = this.#getSizes();
     const END_DEGREE = convertValueToDegree(value);
     const CURRENT_COLOR = convertRGBToHex(
       convertValueToGradientColor(this.startColor, this.endColor, value)
@@ -189,9 +189,7 @@ export class GaugeChart {
 
   #drawText(value: number) {
     const TEXT = value.toFixed(1);
-    const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
-    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
-    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
+    const { RADIUS, TEXT_SIZE } = this.#getSizes();
 
     drawText(
       this.ctx,
@@ -220,13 +218,12 @@ export class GaugeChart {
     );
   }
 
-  onMouseHover(e: Event) {
+  #onMouseHover(e: Event) {
     const { offsetX, offsetY, clientX, clientY } = e as MouseEvent;
-    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
-    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
-    const END_DEGREE =
+    const { WIDTH, RADIUS } = this.#getSizes();
+    const CURSOR_DEGREE =
       Math.atan2(offsetY - this.canvasHeight / 2, offsetX - this.canvasWidth / 2) * (180 / Math.PI);
-    const VALUE_DEGREE = convertValueToDegree(this.percentageValue);
+    const END_DEGREE = convertValueToDegree(this.percentageValue);
 
     const DISTANCE = Math.sqrt(
       Math.pow(offsetX - this.canvasWidth / 2, 2) +
@@ -236,7 +233,7 @@ export class GaugeChart {
     const isMouseOnGauge =
       DISTANCE <= RADIUS + WIDTH / 2 &&
       DISTANCE >= RADIUS - WIDTH / 2 &&
-      checkDegreeInRange(END_DEGREE, VALUE_DEGREE);
+      checkDegreeInRange(CURSOR_DEGREE, END_DEGREE);
 
     this.#drawGauge(this.percentageValue, isMouseOnGauge);
     this.#drawText(this.percentageValue);
@@ -244,5 +241,19 @@ export class GaugeChart {
     this.tooltipDOM.style.top = `${clientY}px`;
     this.tooltipDOM.style.left = `${clientX + 20}px`;
     this.tooltipDOM.innerText = `${this.percentageValue.toFixed(1)}%`;
+  }
+
+  onUnmount() {
+    this.canvasDOM.removeEventListener('mousemove', this.#onMouseHover.bind(this));
+    this.target.removeChild(this.canvasDOM);
+    document.body.removeChild(this.tooltipDOM);
+  }
+
+  #getSizes() {
+    const WIDTH = (Math.min(this.canvasWidth, this.canvasHeight) * 20) / 100;
+    const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
+    const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
+
+    return { WIDTH, RADIUS, TEXT_SIZE };
   }
 }
