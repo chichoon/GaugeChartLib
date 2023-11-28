@@ -47,8 +47,8 @@ export const Default: Story = {
 export const WithEndColor: Story = {
   args: {
     startColor: '#220AFA',
-    endColor: '#8CC7F9',
-    value: 35,
+    endColor: '#ffffff',
+    value: 66,
     minValue: 0,
     maxValue: 100
   }
