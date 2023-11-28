@@ -117,6 +117,9 @@ export class GaugeChart {
     this.textCanvasDOM.style.height = `${SIZE}px`;
     this.textCanvasDOM.height = SIZE * DPR;
 
+    this.chartContext.scale(DPR, DPR);
+    this.textContext.scale(DPR, DPR);
+
     this.canvasWidth = this.canvasDOM.width;
     this.canvasHeight = this.canvasDOM.height;
   }
@@ -293,6 +296,7 @@ export class GaugeChart {
     const RADIUS = Math.min(this.canvasWidth, this.canvasHeight) / 2 - WIDTH / 2 - 4;
     const TEXT_SIZE = (Math.min(this.canvasWidth, this.canvasHeight) * 15) / 100;
 
+    if (RADIUS < 0) return { WIDTH, RADIUS: 0, TEXT_SIZE };
     return { WIDTH, RADIUS, TEXT_SIZE };
   }
 
