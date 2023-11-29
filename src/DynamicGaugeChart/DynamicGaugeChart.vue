@@ -8,6 +8,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+// 스토리북 데코레이터: 리사이즈를 쉽게 구현할 수 있다
+// 굳이 이렇게 수치상으로 구현할 필요가 없다
 </script>
 
 <template>

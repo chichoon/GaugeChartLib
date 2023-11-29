@@ -293,6 +293,8 @@ export class GaugeChart {
     this.canvasDOM.removeEventListener('mouseleave', this.#onMouseOutBound);
     this.target.removeChild(this.wrapperDOM);
     document.body.removeChild(this.tooltipDOM);
+    cancelAnimationFrame(this.animationFrameEventId); // 진행중인 애니메이션 취소
+    this.animationFrameEventId = 0;
   }
 
   #getSizes() {
