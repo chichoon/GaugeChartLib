@@ -55,6 +55,10 @@ export class GaugeChart {
   /* Animation-related Options */
   animationFrameEventId: number = 0;
 
+  /* Hover-tooltip related functions */
+  #onMouseHoverBinded: (e: Event) => void = this.#onMouseHover.bind(this);
+  #onMouseOutBinded: (e: Event) => void = this.#onMouseOut.bind(this);
+
   constructor(args: GaugeChartInitialArgs) {
     this.#initialize(args, true);
     this.target = args.target;
@@ -141,11 +145,11 @@ export class GaugeChart {
       return;
     }
 
-    this.canvasDOM.removeEventListener('mousemove', this.#onMouseHover.bind(this));
+    this.canvasDOM.removeEventListener('mousemove', this.#onMouseHoverBinded);
     const DELTA = (this.percentageValue - this.previousValue) / 60;
     this.#drawChartWithAnimation(this.previousValue, DELTA);
-    this.canvasDOM.addEventListener('mousemove', this.#onMouseHover.bind(this));
-    this.canvasDOM.addEventListener('mouseleave', this.#onMouseOut.bind(this));
+    this.canvasDOM.addEventListener('mousemove', this.#onMouseHoverBinded);
+    this.canvasDOM.addEventListener('mouseleave', this.#onMouseOutBinded);
   }
 
   #drawChartWithAnimation(value: number, delta: number) {
@@ -285,7 +289,8 @@ export class GaugeChart {
   }
 
   onUnmount() {
-    this.canvasDOM.removeEventListener('mousemove', this.#onMouseHover.bind(this));
+    this.canvasDOM.removeEventListener('mousemove', this.#onMouseHoverBinded);
+    this.canvasDOM.removeEventListener('mouseleave', this.#onMouseOutBinded);
     this.target.removeChild(this.wrapperDOM);
     document.body.removeChild(this.tooltipDOM);
   }
