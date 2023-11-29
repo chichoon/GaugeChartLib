@@ -1,10 +1,6 @@
-import {
-  checkDegreeInRange,
-  convertValueToDegree,
-  convertValueToGradientColor,
-  drawSector,
-  drawText
-} from './utils';
+import { checkDegreeInRange, convertValueToDegree, convertValueToGradientColor } from './utils';
+
+import { drawSector, drawText } from './utils/draw';
 
 interface GaugeChartArgs {
   percentageValue: number;
@@ -163,8 +159,8 @@ export class GaugeChart {
       return;
     }
     if (
-      (delta > 0 && value >= this.percentageValue) ||
-      (delta < 0 && value <= this.percentageValue)
+      (delta > 0 && value > this.percentageValue) ||
+      (delta < 0 && value < this.percentageValue)
     ) {
       this.#drawChartWithAnimation(this.percentageValue, 0);
       return;

@@ -1,4 +1,4 @@
-import { convertToRadians } from '.';
+import { convertToRadians } from '..';
 
 export function drawSector(
   ctx: CanvasRenderingContext2D,

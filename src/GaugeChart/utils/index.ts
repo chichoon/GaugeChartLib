@@ -1,6 +1,3 @@
-export { drawCircle } from './drawCircle';
-export { drawSector } from './drawSector';
-export { drawText } from './drawText';
 export { checkDegreeInRange } from './checkDegreeInRange';
 export { convertToRadians } from './convertToRadians';
 export { convertValueToDegree } from './convertValueToDegree';
