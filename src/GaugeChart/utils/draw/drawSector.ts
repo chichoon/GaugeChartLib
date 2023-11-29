@@ -1,4 +1,6 @@
-import { convertToRadians } from '..';
+function convertToRadians(degrees: number) {
+  return (degrees * Math.PI) / 180;
+}
 
 export function drawSector(
   ctx: CanvasRenderingContext2D,
